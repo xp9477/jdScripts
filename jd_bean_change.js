@@ -9,7 +9,7 @@ Modified time: 2021-06-9 15:25:41
 ============QuantumultX==============
 [task_local]
 #京东资产变动通知
-2 9 * * * jd_bean_change.js, tag=京东资产变动通知, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+2 15 * * * jd_bean_change.js, tag=京东资产变动通知, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 ================Loon===============
 [Script]
 cron "2 9 * * *" script-path=jd_bean_change.js, tag=京东资产变动通知
