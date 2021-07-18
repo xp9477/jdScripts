@@ -29,7 +29,7 @@ let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭�
 let cookiesArr = [], cookie = '', message;
 let helpAuthor = true;
 const randomCount = $.isNode() ? 5 : 5;
-let cash_exchange = true;//是否消耗2元红包兑换200京豆，默认否
+let cash_exchange = false;
 const inviteCodes = ['ZE9qOoTIH4ZOsha1lzk@eU9Ya-W0Zfki9mbUn3oQ0A@9oKgtH0hZ_Uv8A',
 'ZE9qOoTIH4ZOsha1lzk@eU9YaLm1b_Ulo22EznoUhA@eU9YDq_oNYZfhRCSvzNF']
 if ($.isNode()) {
@@ -48,8 +48,8 @@ let allMessage = '';
     return;
   }
   await requireConfig()
-  await getAuthorShareCode();
-  await getAuthorShareCode2();
+  //await getAuthorShareCode();
+  //await getAuthorShareCode2();
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -85,8 +85,8 @@ let allMessage = '';
 async function jdCash() {
   $.signMoney = 0;
   await index()
-  await shareCodesFormat()
-  await helpFriends()
+  //await shareCodesFormat()
+  //await helpFriends()
   await getReward()
   await getReward('2');
   $.exchangeBeanNum = 0;
