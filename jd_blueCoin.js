@@ -21,7 +21,7 @@ cron "0 0 0 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/j
 东东超市兑换奖品 = type=cron,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_blueCoin.js, cronexpr="0 0 0 * * *", timeout=3600, enable=true
  */
 const $ = new Env('东东超市兑换奖品');
-const ua = `jdltapp;iPhone;3.1.0;${Math.ceil(Math.random()*4+10)}.${Math.ceil(Math.random()*4)};${randomString(40)}`
+const ua = "jdapp;iPhone;10.0.2;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"
 const notify = $.isNode() ? require('./sendNotify') : '';
 let allMessage = '';
 //Node.js用户请在jdCookie.js处填写京东ck;
