@@ -23,7 +23,9 @@ const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 $.showLog = $.getdata("cfd_showLog") ? $.getdata("cfd_showLog") === "true" : false;
 $.notifyTime = $.getdata("cfd_notifyTime");
 $.result = [];
-$.shareCodes = [];
+$.shareCodes = ['5906987ED67ACBA281B31421A3AD7114A01A0C267756879CAADCD490F44CAC72',
+'4F92F6E56B02F86810E13B6967D29D5821732BAD4767AA3FC8F62D01FFB5F6B7',
+'A0F9F80D2AF2AC1054F48675138A87DC045D32C5D69DC65C725F53ECFADBCF0E'];
 let cookiesArr = [], cookie = '', token;
 
 const randomCount = $.isNode() ? 3 : 3;
