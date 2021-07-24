@@ -1,6 +1,6 @@
 /*
 特务Zx佳沛
-cron 23 0,9 24-27 7 *
+cron 23 0,9 24-27 7 * jd_productZ4Brand.js
 要跑2次，第一次做任务和脚本内互助，第二次才够币抽奖
 */
 const $ = new Env('特务Zx佳沛');
