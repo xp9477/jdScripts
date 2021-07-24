@@ -5,10 +5,10 @@
 Author: Curtin
 功能: 东东超市商品兑换
 Date: 2021/4/17 上午11:22
-update: 2021/7/17 01:15
+update: 2021/7/24 14:30
 TG交流 https://t.me/topstyle996
 TG频道 https://t.me/TopStyle2021
-建议cron: 50 23 * * *  python3 jd_blueCoin.py
+建议cron: 55 23 * * *  python3 jd_blueCoin.py
 '''
 ################【参数】######################
 # ck 优先读取【JDCookies.txt】 文件内的ck  再到 ENV的 变量 JD_COOKIE='ck1&ck2' 最后才到脚本内 cookies=ck
@@ -20,7 +20,7 @@ coinToBeans = '超值京豆包'
 #多账号并发，默认关闭 ENV设置开启： export blueCoin_Cc=True
 blueCoin_Cc = False
 #单击次数
-dd_thread = 1
+dd_thread = 5
 ###############################################
 
 import time, datetime, os, sys, random
@@ -38,11 +38,11 @@ inStock = ''
 UserAgent = ''
 periodId = ''
 #最长抢兑结束时间
-endtime='00:00:30.00000000'
+endtime='00:00:10.00000000'
 today = datetime.datetime.now().strftime('%Y-%m-%d')
 unstartTime = datetime.datetime.now().strftime('%Y-%m-%d 23:55:00.00000000')
 tomorrow = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime('%Y-%m-%d')
-starttime = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime('%Y-%m-%d 00:00:00.00000000')
+starttime = (datetime.datetime.now() + datetime.timedelta(days=0)).strftime('%Y-%m-%d 23:59:59.00000000')
 
 
 def printT(s):
@@ -71,7 +71,6 @@ def getEnvs(label):
 
 class getJDCookie(object):
     # 适配各种平台环境ck
-
     def getckfile(self):
         global v4f
         curf = pwd + 'JDCookies.txt'
@@ -200,19 +199,19 @@ getCk = getJDCookie()
 getCk.getCookie()
 
 # 获取v4环境 特殊处理
-try:
-    with open(v4f, 'r', encoding='utf-8') as v4f:
-        v4Env = v4f.read()
-    r = re.compile(r'^export\s(.*?)=[\'\"]?([\w\.\-@#&=_,\[\]\{\}\(\)]{1,})+[\'\"]{0,1}$',
-                   re.M | re.S | re.I)
-    r = r.findall(v4Env)
-    curenv = locals()
-    for i in r:
-        if i[0] != 'JD_COOKIE':
-            curenv[i[0]] = getEnvs(i[1])
-except:
-    pass
-
+if os.path.exists('/jd/config/config.sh'):
+    try:
+        with open('/jd/config/config.sh', 'r', encoding='utf-8') as f:
+            curenv = locals()
+            for i in f.readlines():
+                r = re.compile(r'^export\s(.*?)=[\'\"]?([\w\.\-@#&=_,\[\]\{\}\(\)]{1,})+[\'\"]{0,1}$', re.M | re.S | re.I)
+                r = r.findall(i)
+                if len(r) > 0:
+                    for i in r:
+                        if i[0] != 'JD_COOKIE':
+                            curenv[i[0]] = getEnvs(i[1])
+    except:
+        pass
 
 
 if "coinToBeans" in os.environ:
@@ -440,8 +439,7 @@ def smtg_obtainPrize(prizeId, areaId, periodId, headers, username):
         printT(result)
         success = result['data']['success']
         bizMsg = result['data']['bizMsg']
-        if success == True:
-            printT(result)
+        if success:
             printT(f"【{username}】{bizMsg}...恭喜兑换成功！")
             return 0
         else:
@@ -449,6 +447,7 @@ def smtg_obtainPrize(prizeId, areaId, periodId, headers, username):
             return 999
     except Exception as e:
         printT(e)
+        return 999
 
 
 def issmtg_obtainPrize(ck, user_num, prizeId, areaId, periodId, title):
@@ -469,13 +468,15 @@ def issmtg_obtainPrize(ck, user_num, prizeId, areaId, periodId, title):
                 return 0
         nowtime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f8')
         if nowtime > qgendtime:
-            return 2
-        title, prizeId, blueCost, status, skuId, areaId, periodId = isCoinToBeans(coinToBeans, setHeaders(ck))
-        if status == 2:
-            printT("{1}, 你好呀~【{0}】 当前没货了......".format(title, userName))
-            return 2
+            title, prizeId, blueCost, status, skuId, areaId, periodId = isCoinToBeans(coinToBeans, setHeaders(ck))
+            if status == 2:
+                printT("{1}, 你好呀~【{0}】 当前没货了......".format(title, userName))
+                return 2
+            else:
+                return 0
         else:
             return 0
+
 
     except Exception as e:
         printT(e)
@@ -518,7 +519,7 @@ def checkUser(cookies,): #返回符合条件的ck list
 #Start
 def start():
     try:
-        global  cookiesList, userNameList, pinNameList, cookies, qgendtime
+        global cookiesList, userNameList, pinNameList, cookies, qgendtime
         printT("{} Start".format(script_name))
         cookiesList, userNameList, pinNameList = getCk.iscookie()
         cookies = checkUser(cookiesList)
@@ -527,7 +528,8 @@ def start():
             msg("并发模式：多账号")
         else:
             msg("并发模式：单账号")
-        printT(f"开始抢兑时间[{starttime}]\n正在等待，请勿终止退出...")
+        printT(f"开始抢兑时间[{starttime}]")
+        a = 0
         while True:
             nowtime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f8')
             if nowtime > starttime:
@@ -542,6 +544,8 @@ def start():
                     for thread in ttt:
                         thread.join()
                         result = thread.get_result()
+                        if result == 2:
+                            break
                     if result == 2:
                         break
                 else:
@@ -549,6 +553,8 @@ def start():
                     for ck in cookies:
                         response = issmtg_obtainPrize(ck, user_num, prizeId, areaId, periodId, title)
                         user_num += 1
+                        if response == 2:
+                            break
                     if response == 2:
                         break
             elif nowtime > qgendtime:
@@ -557,6 +563,10 @@ def start():
                 printT("Sorry，还没到时间。")
                 printT("【皮卡丘】建议cron: 59 23 * * *  python3 jd_blueCoin.py")
                 break
+            else:
+                if a == 0:
+                    a = 1
+                    printT(f"正在等待，请勿终止退出...")
     except Exception as e:
         printT(e)
 if __name__ == '__main__':
