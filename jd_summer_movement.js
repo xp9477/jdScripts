@@ -26,7 +26,7 @@ if ($.isNode() && process.env.summer_movement_ShHelpFlag) {
 }
 
 // 邀请助力
-let summer_movement_HelpHelpHelpFlag = false;// 是否只执行邀请助力  true 是，false 不是
+//let summer_movement_HelpHelpHelpFlag = false;// 是否只执行邀请助力  true 是，false 不是
 if ($.isNode() && process.env.summer_movement_HelpHelpHelpFlag) {
   summer_movement_HelpHelpHelpFlag = process.env.summer_movement_HelpHelpHelpFlag;
 }
