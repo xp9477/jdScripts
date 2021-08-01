@@ -14,23 +14,9 @@ Last Modified time: 2021-1-22 14:27:20
 网页入口（注：进入后不能再此刷新，否则会有问题，需重新输入此链接进入）
 https://h5.m.jd.com/babelDiy/Zeus/2HFSytEAN99VPmMGZ6V4EYWus1x/index.html
 
-已支持IOS双京东账号,Node.js支持N个京东账号
-脚本兼容: QuantumultX, Surge, Loon, 小火箭，JSBox, Node.js
-===============Quantumultx===============
-[task_local]
-#东东小窝
-16 22 * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_small_home.js, tag=东东小窝, img-url=https://raw.githubusercontent.com/58xinian/icon/master/ddxw.png, enabled=true
+16 19 * * * jd_small_home.js
 
-================Loon==============
-[Script]
-cron "16 22 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_small_home.js, tag=东东小窝
-
-===============Surge=================
-东东小窝 = type=cron,cronexp="16 22 * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_small_home.js
-
-============小火箭=========
-东东小窝 = type=cron,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_small_home.js, cronexpr="16 22 * * *", timeout=3600, enable=true
- */
+*/
 const $ = new Env('东东小窝');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;

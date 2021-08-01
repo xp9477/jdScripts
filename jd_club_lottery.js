@@ -5,21 +5,8 @@ Last Modified time: 2021-5-11 09:27:09
 增加超级品牌日做任务及抽奖
 增加 京东小魔方 抽奖
 Modified from https://github.com/Zero-S1/JD_tools/blob/master/JD_vvipclub.py
-已支持IOS双京东账号,Node.js支持N个京东账号
-脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
-============QuantumultX==============
-[task_local]
-#摇京豆
-35 0,23 * * * jd_club_lottery.js, tag=摇京豆, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdyjd.png, enabled=true
-=================Loon===============
-[Script]
-cron "5 0,23 * * *" script-path=jd_club_lottery.js,tag=摇京豆
-=================Surge==============
-[Script]
-摇京豆 = type=cron,cronexp="5 0,23 * * *",wake-system=1,timeout=3600,script-path=jd_club_lottery.js
 
-============小火箭=========
-摇京豆 = type=cron,script-path=jd_club_lottery.js, cronexpr="5 0,23 * * *", timeout=3600, enable=true
+0 3,23 * * * jd_club_lottery.js
 */
 
 const $ = new Env('摇京豆');

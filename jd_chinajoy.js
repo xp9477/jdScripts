@@ -1,5 +1,5 @@
 /*
-0 12 * * * jd_chinajoy.js
+0 14 * * * jd_chinajoy.js
 */
 
 const $ = new Env('柠檬大富翁ChinaJoy');

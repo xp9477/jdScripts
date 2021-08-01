@@ -2,7 +2,7 @@
 Last Modified time: 2020-11-20 14:11:01
 活动入口：京东金融-天天提鹅
 定时收鹅蛋,兑换金币
-40 3-20/2 * * * jd_daily_egg.js
+40 4,7, * * * jd_daily_egg.js
 */
 const $ = new Env('天天提鹅');
 let cookiesArr = [], cookie = '';

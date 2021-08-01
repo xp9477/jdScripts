@@ -7,7 +7,7 @@ export InviterPin="dS%2Bp85VyjydPuAOOnFP%2Faw%3D%3D" ##你的邀请码
 
 [task_local]
 #柠檬赚金币
-15 0 * * * http://nm66.top/jd_zjb.js, tag=柠檬赚金币, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+15 6 * * * http://nm66.top/jd_zjb.js, tag=柠檬赚金币, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 */
 const $ = new Env('柠檬赚金币');
 const notify = $.isNode() ? require('./sendNotify') : '';

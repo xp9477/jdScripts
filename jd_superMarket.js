@@ -5,7 +5,7 @@
 
  */
 
-// 11 */2 * * * jd_superMarket.js
+// 11 3,5,8,14,18 * * * jd_superMarket.js
 
 const $ = new Env('东东超市');
 //Node.js用户请在jdCookie.js处填写京东ck;

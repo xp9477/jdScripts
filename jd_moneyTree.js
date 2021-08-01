@@ -2,22 +2,10 @@
 京东摇钱树 ：https://gitee.com/lxk0301/jd_scripts/raw/master/jd_moneyTree.js
 更新时间：2021-4-23
 活动入口：京东APP我的-更多工具-摇钱树，[活动链接](https://uua.jr.jd.com/uc-fe-wxgrowing/moneytree/index/?channel=yxhd)
-京东摇钱树支持京东双账号
-注：如果使用Node.js, 需自行安装'crypto-js,got,http-server,tough-cookie'模块. 例: npm install crypto-js http-server tough-cookie got --save
-===============Quantumultx===============
-[task_local]
+
+
 #京东摇钱树
-3 1-23/2 * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_moneyTree.js, tag=京东摇钱树, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdyqs.png, enabled=true
-
-==============Loon===========
-[Script]
-cron "3 1-23/2 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_moneyTree.js,tag=京东摇钱树
-
-===============Surge===========
-京东摇钱树 = type=cron,cronexp="3 1-23/2 * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_moneyTree.js
-
-============小火箭=========
-京东摇钱树 = type=cron,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_moneyTree.js, cronexpr="3 1-23/2 * * *", timeout=3600, enable=true
+3 3,14,17,19 * * * jd_moneyTree.js
 */
 
 const $ = new Env('京东摇钱树');

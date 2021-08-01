@@ -1,7 +1,7 @@
 /*
   https://st.jingxi.com/fortune_island/index2.html
 
-  45 0,1,9,14,18 * * * https://raw.githubusercontent.com/smiek2221/scripts/master/gua_wealth_island_help.js 财富大陆互助
+  45 1,10,18 * * * https://raw.githubusercontent.com/smiek2221/scripts/master/gua_wealth_island_help.js 财富大陆互助
 
 */
 

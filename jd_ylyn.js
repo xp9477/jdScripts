@@ -8,7 +8,7 @@ https://lzdz-isv.isvjcloud.com/dingzhi/yili/yangniu/activity/5070687?activityId=
 
 [task_local]
 #柠檬伊利养牛记
-0 12 * * * https://raw.githubusercontent.com/panghu999/panghu/jd_ylyn.js, tag=柠檬伊利养牛记, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+0 13 * * * https://raw.githubusercontent.com/panghu999/panghu/jd_ylyn.js, tag=柠檬伊利养牛记, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 */
 const $ = new Env('柠檬伊利养牛记');
 //Node.js用户请在jdCookie.js处填写京东ck;

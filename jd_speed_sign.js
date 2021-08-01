@@ -5,7 +5,7 @@
 
 活动时间：长期
 活动入口：京东极速版app-现金签到
-30 1 * * * jd_speed_sign.js
+30 2 * * * jd_speed_sign.js
 */
 
 const $ = new Env('京东极速版');

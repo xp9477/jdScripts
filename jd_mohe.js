@@ -3,22 +3,9 @@
 活动地址: https://isp5g.m.jd.com
 活动时间：2021-06-2到2021-07-31
 更新时间：2021-06-3 12:00
-脚本兼容: QuantumultX, Surge,Loon, JSBox, Node.js
-=================================Quantumultx=========================
-[task_local]
-#5G超级盲盒
-2 0,1-23/3 * * * jd_mohe.js, tag=5G超级盲盒, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 
-=================================Loon===================================
-[Script]
-cron "2 0,1-23/3 * * *" script-path=jd_mohe.js,tag=5G超级盲盒
-
-===================================Surge================================
-5G超级盲盒 = type=cron,cronexp="2 0,1-23/3 * * *",wake-system=1,timeout=3600,script-path=jd_mohe.js
-
-====================================小火箭=============================
-5G超级盲盒 = type=cron,script-path=jd_mohe.js, cronexpr="2 0,1-23/3 * * *", timeout=3600, enable=true
- */
+2 0,1-23/4 * * * jd_mohe.js
+*/
 const $ = new Env('5G超级盲盒');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;

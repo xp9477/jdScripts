@@ -2,7 +2,7 @@
 领金贴(只做签到以及互助任务里面的部分任务)
 活动入口：京东APP首页-领金贴，[活动地址](https://active.jd.com/forever/cashback/index/)
 #领金贴
-10 11 * * * jd_jin_tie.js
+10 10 * * * jd_jin_tie.js
  */
 const $ = new Env('领金贴');
 const notify = $.isNode() ? require('./sendNotify') : '';

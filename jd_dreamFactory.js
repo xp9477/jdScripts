@@ -6,7 +6,7 @@
 活动入口：京东APP-游戏与互动-查看更多-京喜工厂
 或者: 京东APP首页搜索 "玩一玩" ,造物工厂即可
 
-10 3-21 * * * jd_dreamFactory.js
+40 3,6,11,14 * * * jd_dreamFactory.js
  */
 // prettier-ignore
 !function (t, r) { "object" == typeof exports ? module.exports = exports = r() : "function" == typeof define && define.amd ? define([], r) : t.CryptoJS = r() }(this, function () {

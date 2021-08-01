@@ -4,7 +4,7 @@
 更新时间：2021-4-23
 活动入口：京东APP首页搜索 "玩一玩"即可
 
-5-45/20 1-4 * * * jd_health_collect.js
+5 19-22 * * * jd_health_collect.js
  */
 const $ = new Env("东东健康社区收集能量收集");
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
