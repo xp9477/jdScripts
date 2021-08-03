@@ -1,6 +1,6 @@
 /*
 
-0 8,12 * * *  jd_wish.js
+10 10 * * *  jd_wish.js
 
 */
 const $ = new Env('柠檬众筹许愿池');
