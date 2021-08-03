@@ -1,11 +1,9 @@
 /*
-入口 京东众筹 许愿池 
-更新时间 ：2021年8月3日
 
-10 10 * * * jd_wish.js
+0 8,12 * * *  jd_wish.js
 
 */
-const $ = new Env('众筹许愿池');
+const $ = new Env('柠檬众筹许愿池');
 const notify = $.isNode() ? require("./sendNotify") : "";
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 let timestamp = Date.now();
@@ -82,19 +80,20 @@ function task() {
 
                 let options = {
     url: `https://api.m.jd.com/client.action`,
+
     body: `functionId=healthyDay_getHomeData&body={"appId":"1E1NXxq0","taskToken":"","channelId":1}&client=wh5&clientVersion=1.0.0`,
-    headers: {
-        "Origin": "https://h5.jd.com",
-        "Host": "api.m.jd.com",
-        "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 UBrowser/5.6.12150.8 Safari/537.36",
-        "Cookie": cookie,
+headers: {
+"Origin": "https://h5.jd.com",
+"Host": "api.m.jd.com",
+"User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 UBrowser/5.6.12150.8 Safari/537.36",
+      "Cookie": cookie,
       }
                 }
       
         $.post(options, async (err, resp, data) => {
             try {
-                data = JSON.parse(data);
-                $.log(`${data}`)
+
+                    data = JSON.parse(data);
                 if(data.data.bizMsg == "success"){
                  $.log(`===============存货金币===============`)   
                  $.log(`${data.data.result.userInfo.userScore}币`)
@@ -108,27 +107,26 @@ function task() {
                  
                  
                    $.log(`===============浏览并关注众筹频道===============`)
-
                    tk =tasklist[0].shoppingActivityVos[0].taskToken 
                    taskId = tasklist[0].taskId
                    await dotask(tk,taskId,0)
                    await dotask(tk,taskId,1)
                    
                    await dotask(tk,taskId,0)
-                   $.log(`===============浏览众筹频道 15s===============`)
+                   $.log(`===============浏览众筹频道===============`)
                    tk =tasklist[1].shoppingActivityVos[0].taskToken 
                    taskId = tasklist[1].taskId
                    await dotask(tk,taskId,0)
                    await dotask(tk,taskId,1)
                    await $.wait(15000)
                    await dotask(tk,taskId,0)
-                   $.log(`===============浏览众筹爆款商品 5x10s===============`)
+                   $.log(`===============每浏览商品10s可获得200金币===============`)
                    tk =tasklist[2].productInfoVos[0].taskToken 
                    taskId = tasklist[2].taskId
                    item = tasklist[2].productInfoVos[0].itemId
                    await dotask(tk,taskId,0,item)
                    await dotask(tk,taskId,1,item)
-                   await $.wait(15000)
+                   await $.wait(11000)
                    await dotask(tk,taskId,0,item)
                    
                    tk =tasklist[2].productInfoVos[1].taskToken 
@@ -136,28 +134,28 @@ function task() {
                    item = tasklist[2].productInfoVos[1].itemId
                    await dotask(tk,taskId,0,item)
                    await dotask(tk,taskId,1,item)
-                   await $.wait(15000)
+                   await $.wait(11000)
                    await dotask(tk,taskId,0,item)
                    tk =tasklist[2].productInfoVos[2].taskToken 
                    taskId = tasklist[2].taskId
                    item = tasklist[2].productInfoVos[2].itemId
                    await dotask(tk,taskId,0,item)
                    await dotask(tk,taskId,1,item)
-                   await $.wait(15000)
+                   await $.wait(11000)
                    await dotask(tk,taskId,0,item)
                    tk =tasklist[2].productInfoVos[3].taskToken
                    item = tasklist[2].productInfoVos[3].itemId
                    taskId = tasklist[2].taskId
                    await dotask(tk,taskId,0,item)
                    await dotask(tk,taskId,1,item)
-                   await $.wait(15000)
+                   await $.wait(11000)
                    await dotask(tk,taskId,0,item)
                    tk =tasklist[2].productInfoVos[4].taskToken 
                    item = tasklist[2].productInfoVos[4].itemId
                    taskId = tasklist[2].taskId
                    await dotask(tk,taskId,0,item)
                    await dotask(tk,taskId,1,item)
-                   await $.wait(15000)
+                   await $.wait(11000)
                    await dotask(tk,taskId,0,item)
                    $.log(`===============邀请一个好友助力可获得300金币===============`)
                    tk =tasklist[3].assistTaskDetailVo.taskToken
@@ -223,6 +221,7 @@ function task() {
 
 function help(taskToken,taskId,actionType,itemId) {
     return new Promise(async (resolve) => {
+
                 let options = {
     url: `https://api.m.jd.com/client.action`,
 
@@ -234,7 +233,7 @@ headers: {
       "Cookie": ck2,
       }
                 }
-
+      
         $.post(options, async (err, resp, data) => {
             try {
 
@@ -322,7 +321,7 @@ headers: {
      $.log(data.data.result.userAwardsCacheDto.jBeanAwardVo.prizeName)
      allMessage += `京东账号${$.index}-${$.nickName || $.UserName}\n抽奖京豆: ${data.data.result.userAwardsCacheDto.jBeanAwardVo.quantity}${$.index !== cookiesArr.length ? '\n\n' : '\n\n'}`;
                  }else 
-                 $.log(`叼毛 恭喜你 几把毛都没抽到`)
+                 $.log(`啥都没抽到`)
                  
                  
                  
