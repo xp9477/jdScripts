@@ -1,10 +1,11 @@
 /*
 入口 京东众筹 许愿池 
+更新时间 ：2021年8月3日
 
 10 10 * * * jd_wish.js
 
 */
-const $ = new Env('柠檬众筹许愿池');
+const $ = new Env('众筹许愿池');
 const notify = $.isNode() ? require("./sendNotify") : "";
 const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 let timestamp = Date.now();
@@ -81,20 +82,19 @@ function task() {
 
                 let options = {
     url: `https://api.m.jd.com/client.action`,
-
-    body: `functionId=healthyDay_getHomeData&body={"appId":"1EFVQwQ","taskToken":"","channelId":1}&client=wh5&clientVersion=1.0.0`,
-headers: {
-"Origin": "https://h5.jd.com",
-"Host": "api.m.jd.com",
-"User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 UBrowser/5.6.12150.8 Safari/537.36",
-      "Cookie": cookie,
+    body: `functionId=healthyDay_getHomeData&body={"appId":"1E1NXxq0","taskToken":"","channelId":1}&client=wh5&clientVersion=1.0.0`,
+    headers: {
+        "Origin": "https://h5.jd.com",
+        "Host": "api.m.jd.com",
+        "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 UBrowser/5.6.12150.8 Safari/537.36",
+        "Cookie": cookie,
       }
                 }
       
         $.post(options, async (err, resp, data) => {
             try {
-
-                    data = JSON.parse(data);
+                data = JSON.parse(data);
+                $.log(`${data}`)
                 if(data.data.bizMsg == "success"){
                  $.log(`===============存货金币===============`)   
                  $.log(`${data.data.result.userInfo.userScore}币`)
@@ -108,20 +108,21 @@ headers: {
                  
                  
                    $.log(`===============浏览并关注众筹频道===============`)
+
                    tk =tasklist[0].shoppingActivityVos[0].taskToken 
                    taskId = tasklist[0].taskId
                    await dotask(tk,taskId,0)
                    await dotask(tk,taskId,1)
                    
                    await dotask(tk,taskId,0)
-                   $.log(`===============浏览众筹频道===============`)
+                   $.log(`===============浏览众筹频道 15s===============`)
                    tk =tasklist[1].shoppingActivityVos[0].taskToken 
                    taskId = tasklist[1].taskId
                    await dotask(tk,taskId,0)
                    await dotask(tk,taskId,1)
                    await $.wait(15000)
                    await dotask(tk,taskId,0)
-                   $.log(`===============每浏览商品15s可获得200金币===============`)
+                   $.log(`===============浏览众筹爆款商品 5x10s===============`)
                    tk =tasklist[2].productInfoVos[0].taskToken 
                    taskId = tasklist[2].taskId
                    item = tasklist[2].productInfoVos[0].itemId
@@ -222,11 +223,10 @@ headers: {
 
 function help(taskToken,taskId,actionType,itemId) {
     return new Promise(async (resolve) => {
-
                 let options = {
     url: `https://api.m.jd.com/client.action`,
 
-    body: `functionId=harmony_collectScore&body={"appId":"1EFVQwQ","taskToken":"${taskToken}","taskId":${taskId},"itemId":"${itemId}","actionType":${actionType}}&client=wh5&clientVersion=1.0.0`,
+    body: `functionId=harmony_collectScore&body={"appId":"1E1NXxq0","taskToken":"${taskToken}","taskId":${taskId},"itemId":"${itemId}","actionType":${actionType}}&client=wh5&clientVersion=1.0.0`,
 headers: {
 "Origin": "https://h5.jd.com",
 "Host": "api.m.jd.com",
@@ -234,7 +234,7 @@ headers: {
       "Cookie": ck2,
       }
                 }
-      
+
         $.post(options, async (err, resp, data) => {
             try {
 
@@ -264,7 +264,7 @@ function dotask(taskToken,taskId,actionType,itemId) {
                 let options = {
     url: `https://api.m.jd.com/client.action`,
 
-    body: `functionId=harmony_collectScore&body={"appId":"1EFVQwQ","taskToken":"${taskToken}","taskId":${taskId},"itemId":"${itemId}","actionType":${actionType}}&client=wh5&clientVersion=1.0.0`,
+    body: `functionId=harmony_collectScore&body={"appId":"1E1NXxq0","taskToken":"${taskToken}","taskId":${taskId},"itemId":"${itemId}","actionType":${actionType}}&client=wh5&clientVersion=1.0.0`,
 headers: {
 "Origin": "https://h5.jd.com",
 "Host": "api.m.jd.com",
@@ -301,7 +301,7 @@ function getLottery() {
                 let options = {
     url: `https://api.m.jd.com/client.action`,
 
-    body: `functionId=interact_template_getLotteryResult&body={"appId":"1EFVQwQ"}&client=wh5&clientVersion=1.0.0`,
+    body: `functionId=interact_template_getLotteryResult&body={"appId":"1E1NXxq0"}&client=wh5&clientVersion=1.0.0`,
 headers: {
 "Origin": "https://h5.jd.com",
 "Host": "api.m.jd.com",
