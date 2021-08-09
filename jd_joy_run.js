@@ -6,8 +6,7 @@
 15 10 * * * jd_joy_run.js 
 */
 const $ = new Env('宠汪汪赛跑');
-// const zooFaker = require('./utils/JDJRValidator_Pure');
-const zooFaker = require('./JDJRValidator_Pure');
+const zooFaker = require('./utils/JDJRValidator_Pure');
 
 $.get = zooFaker.injectToRequest2($.get.bind($));
 $.post = zooFaker.injectToRequest2($.post.bind($));
