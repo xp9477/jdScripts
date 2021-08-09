@@ -12,7 +12,7 @@ Last Modified time: 2021-06-06 21:22:37
 // prettier-ignore
 const $ = new Env('宠汪汪积分兑换奖品');
 // const zooFaker = require('./utils/JDJRValidator_Pure');
-const zooFaker = require('./JDJRValidator_Pure');
+const zooFaker = require('./utils/JDJRValidator_Pure');
 
 // $.get = zooFaker.injectToRequest2($.get.bind($));
 // $.post = zooFaker.injectToRequest2($.post.bind($));
