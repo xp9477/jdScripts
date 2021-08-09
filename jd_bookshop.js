@@ -3,7 +3,7 @@
 活动入口：京东app首页-京东图书-签到-下方横幅
 
 #口袋书店
-1 8,12,18 * * * jd_bookshop.js
+15 0 * * * jd_bookshop.js
 
  */
 const $ = new Env('口袋书店');

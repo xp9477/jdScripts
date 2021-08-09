@@ -1,7 +1,7 @@
 /*
 [task_local]
 #翻翻乐
-35 0 * * * jd_fcffl.js
+35 0,8,16 * * * jd_fcffl.js
 */
 const $ = new Env('发财翻翻乐');
 //Node.js用户请在jdCookie.js处填写京东ck;
