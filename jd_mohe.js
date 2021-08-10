@@ -233,7 +233,7 @@ function taskList() {
             console.log('\n\n----taskList的任务全部做完了---\n\n')
             console.log(`分享好友助力 ${task5.finishNum}/${task5.totalNum}\n\n`)
           } else {
-            console.log(`请继续等待,正在做任务,不要退出哦`)
+            //console.log(`请继续等待,正在做任务,不要退出哦`)
             await taskList();
           }
         }
