@@ -1,7 +1,9 @@
 /*
 5G超级盲盒，可抽奖获得京豆，建议在凌晨0点时运行脚本，白天抽奖基本没有京豆，4小时运行一次收集热力值
-活动地址: https://blindbox5g.jd.com
-
+活动地址: 26.0复制整段话 http:/JZ3p4NVyYQQlqm 你离千万京豆更近一步#U43Zz2nu7a%去【椋〣崬】
+活动时间：2021-8-2到2021-10-29
+更新时间：2021-08-22 18:00
+by name : 柠檬
 2 0,1-23/4 * * * jd_mohe.js
  */
 const $ = new Env('5G超级盲盒');
@@ -28,13 +30,12 @@ $.shareId = [];
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  console.log('5G超级盲盒，可抽奖获得京豆，建议在凌晨0点时运行脚本，白天抽奖基本没有京豆，3小时运行一次收集热力值\n' +
-      '活动地址: https://blindbox5g.jd.com\n' +
-      '活动时间：2021-8-2到2021-10-29\n' +
-      '更新时间：2021-8-8 19:00');
-  $.http.get({url: 'https://purge.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/jd_shareCodes.json'}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
-  await $.wait(1000)
-  await updateShareCodesCDN('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/jd_shareCodes.json')
+  console.log(`5G超级盲盒，可抽奖获得京豆，建议在凌晨0点时运行脚本，白天抽奖基本没有京豆，4小时运行一次收集热力值\n
+活动地址: 26.0复制整段话 http:/JZ3p4NVyYQQlqm 你离千万京豆更近一步#U43Zz2nu7a%去【椋〣崬】\n
+活动时间：2021-8-2到2021-10-29\n
+更新时间：2021-08-22 18:00\n
+修复作者: 柠檬`);
+
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -56,7 +57,8 @@ $.shareId = [];
       await shareUrl();
       await getCoin();//领取每三小时自动生产的热力值
       await Promise.all([
-        task0()
+        task0(),
+        task1(),
       ])
       await taskList();
       await getAward();//抽奖
@@ -64,7 +66,7 @@ $.shareId = [];
   }
   if (allMessage) {
     if ($.isNode()) await notify.sendNotify($.name, allMessage);
-    $.msg($.name, '', allMessage, {"open-url": "https://blindbox5g.jd.com"})
+    $.msg($.name, '', allMessage, {"open-url": "https://isp5g.m.jd.com"})
   }
   $.shareId = [...($.shareId || []), ...($.updatePkActivityIdRes || [])];
   for (let v = 0; v < cookiesArr.length; v++) {
@@ -89,6 +91,7 @@ $.shareId = [];
       $.done();
     })
 
+
 async function task0() {
   const confRes = await conf();
   if (confRes.code === 200) {
@@ -112,20 +115,45 @@ async function task0() {
     }
   }
 }
+async function task1() {
+  const confRes = await conf();
+  if (confRes.code === 200) {
+    const { brandList, skuList } = confRes.data;
+    if (brandList && brandList.length > 0) {
+      for (let item of brandList) {
+        if (item.state === 0) {
+          let homeGoBrowseRes = await homeGoBrowse(1, item.id);
+          // console.log('店铺', homeGoBrowseRes);
+          await $.wait(1000);
+          const taskHomeCoin1Res = await taskHomeCoin(1, item.id);
+          console.log('店铺领取金币', taskHomeCoin1Res);
+          // if (homeGoBrowseRes.code === 200) {
+          //   await $.wait(1000);
+          //   await taskHomeCoin(1, item.id);
+          // }
+        } else {
+          console.log('精选店铺-任务已完成')
+        }
+      }
+    }
+  }
+}
 function addShare(shareId) {
   return new Promise((resolve) => {
-    const body = {"shareId":shareId,"apiMapping":"/active/addShare"}
-    $.get(taskurl(body), (err, resp, data) => {
+     
+    //const url = `addShare?shareId=${shareId}&t=${Date.now()}`;
+    const url = `{"shareId":"${shareId}","apiMapping":"/active/addShare"}`;
+    $.post(taskurl(url), (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
+          console.log(`助力结果${data}`)
           data = JSON.parse(data);
           if (data['code'] === 200) {
-            console.log(`助力好友【${data.data}】成功\n`);
-          } else {
-            console.log(`助力失败：${data.msg}`);
+            // console.log(`\n【京东账号${$.index}（${$.nickName || $.UserName}）助力好友 【${data['data']}】 成功\n`);
+            console.log(`\n助力好友 【${data['data']}】 成功\n`);
           }
         }
       } catch (e) {
@@ -138,10 +166,12 @@ function addShare(shareId) {
 }
 function conf() {
   return new Promise((resolve) => {
-    const body = {"apiMapping":"/active/conf"};
-    $.get(taskurl(body), (err, resp, data) => {
+    const url = `{"apiMapping":"/active/conf"}`;
+    $.post(taskurl(url), (err, resp, data) => {
       try {
+        // console.log('ddd----ddd', data)
         data = JSON.parse(data);
+        // console.log('ddd----ddd', data)
       } catch (e) {
         $.logErr(e, resp);
       } finally {
@@ -152,10 +182,13 @@ function conf() {
 }
 function homeGoBrowse(type, id) {
   return new Promise((resolve) => {
-    const body = {"type":type,"id":id,"apiMapping":"/active/homeGoBrowse"}
-    $.get(taskurl(body), (err, resp, data) => {
+    
+    const url = `{"type":${type},"id":"${id}","apiMapping":"/active/homeGoBrowse"}`;
+    $.post(taskurl(url), (err, resp, data) => {
       try {
+        // console.log('homeGoBrowse', data)
         data = JSON.parse(data);
+        // console.log('homeGoBrowse', data)
       } catch (e) {
         $.logErr(e, resp);
       } finally {
@@ -166,10 +199,13 @@ function homeGoBrowse(type, id) {
 }
 function taskHomeCoin(type, id) {
   return new Promise((resolve) => {
-    const body = {"type":type,"id":id,"apiMapping":"/active/taskHomeCoin"}
-    $.get(taskurl(body), (err, resp, data) => {
+      
+    const url = `{"type":${type},"id":"${id}","apiMapping":"/active/taskHomeCoin"}`;
+    $.post(taskurl(url), (err, resp, data) => {
       try {
+        // console.log('homeGoBrowse', data)
         data = JSON.parse(data);
+        // console.log('homeGoBrowse', data)
       } catch (e) {
         $.logErr(e, resp);
       } finally {
@@ -180,10 +216,13 @@ function taskHomeCoin(type, id) {
 }
 function getCoin() {
   return new Promise((resolve) => {
-    const body = {"apiMapping":"/active/getCoin"}
-    $.get(taskurl(body), (err, resp, data) => {
+      
+    const url = `{"apiMapping":"/active/getCoin"}`;
+    $.post(taskurl(url), (err, resp, data) => {
       try {
+        // console.log('homeGoBrowse', data)
         data = JSON.parse(data);
+        // console.log('homeGoBrowse', data)
         if (data.code === 1001) {
           console.log(data.msg);
           $.msg($.name, '领取失败', `${data.msg}`);
@@ -200,16 +239,16 @@ function getCoin() {
     })
   })
 }
-
 function taskList() {
   return new Promise((resolve) => {
-    const body = {"apiMapping":"/active/taskList"}
-    $.get(taskurl(body), async (err, resp, data) => {
+    const url = `{"apiMapping":"/active/taskList"}`;
+    $.post(taskurl(url), async (err, resp, data) => {
       try {
+        // console.log('homeGoBrowse', data)
         data = JSON.parse(data);
+        // console.log(`成功领取${data.data}热力值`)
         if (data.code === 200) {
-          const { task8, task4, task1, task2, task5 } = data.data;
-          //浏览商品
+          const { task4, task6, task5, task2, task1 } = data.data;
           if (task4.finishNum < task4.totalNum) {
             await browseProduct(task4.skuId);
             await taskCoin(task4.type);
@@ -219,9 +258,8 @@ function taskList() {
             await strollActive((task1.finishNum + 1));
             await taskCoin(task1.type);
           }
-          //关注或浏览店铺
           if (task2.finishNum < task2.totalNum) {
-            await followShop(task2.shopId);
+            await strollShop(task2.shopId);
             await taskCoin(task2.type);
           }
           // if (task5.finishNum < task5.totalNum) {
@@ -233,7 +271,7 @@ function taskList() {
             console.log('\n\n----taskList的任务全部做完了---\n\n')
             console.log(`分享好友助力 ${task5.finishNum}/${task5.totalNum}\n\n`)
           } else {
-            //console.log(`请继续等待,正在做任务,不要退出哦`)
+            console.log(`请继续等待,正在做任务,不要退出哦`)
             await taskList();
           }
         }
@@ -245,13 +283,17 @@ function taskList() {
     })
   })
 }
-//浏览商品
+//浏览商品(16个)
 function browseProduct(skuId) {
   return new Promise((resolve) => {
-    const body = {"skuId":skuId,"apiMapping":"/active/browseProduct"}
-    $.post(taskurl(body), (err, resp, data) => {
+      
+    const url = `{"skuId":"${skuId}","apiMapping":"/active/browseProduct"}`;
+    $.post(taskurl(url), (err, resp, data) => {
       try {
+        // console.log('homeGoBrowse', data)
         data = JSON.parse(data);
+        // console.log('homeGoBrowse', data)
+        // console.log(`成功领取${data.data}热力值`)
       } catch (e) {
         $.logErr(e, resp);
       } finally {
@@ -260,13 +302,17 @@ function browseProduct(skuId) {
     })
   })
 }
-// 浏览会场
+// 浏览会场(10个)
 function strollActive(index) {
   return new Promise((resolve) => {
-    const body = {"activeId":index,"apiMapping":"/active/strollActive"}
-    $.get(taskurl(body), (err, resp, data) => {
+      
+    const url = `{"index":"${index}","apiMapping":"/active/strollActive"}`;
+    $.post(taskurl(url), (err, resp, data) => {
       try {
+        // console.log('homeGoBrowse', data)
         data = JSON.parse(data);
+        // console.log('homeGoBrowse', data)
+        // console.log(`成功领取${data.data}热力值`)
       } catch (e) {
         $.logErr(e, resp);
       } finally {
@@ -275,13 +321,17 @@ function strollActive(index) {
     })
   })
 }
-//关注或浏览店铺
-function followShop(shopId) {
+//关注或浏览店铺(9个)
+function strollShop(shopId) {
   return new Promise((resolve) => {
-    const body = {"shopId":shopId,"apiMapping":"/active/followShop"}
-    $.get(taskurl(body), (err, resp, data) => {
+      
+    const url = `{"shopId":"${shopId}","apiMapping":"/active/strollShop"}`;
+    $.post(taskurl(url), (err, resp, data) => {
       try {
+        // console.log('homeGoBrowse', data)
         data = JSON.parse(data);
+        // console.log('homeGoBrowse', data)
+        // console.log(`成功领取${data.data}热力值`)
       } catch (e) {
         $.logErr(e, resp);
       } finally {
@@ -290,13 +340,36 @@ function followShop(shopId) {
     })
   })
 }
-//领取任务奖励
+// 加入会员(7)
+function strollMember(venderId) {
+  return new Promise((resolve) => {
+      
+    const url = `{"venderId":"${venderId}","apiMapping":"/active/strollMember"}`;
+    $.post(taskurl(url), (err, resp, data) => {
+      try {
+        // console.log('homeGoBrowse', data)
+        data = JSON.parse(data);
+        // console.log('homeGoBrowse', data)
+        // console.log(`成功领取${data.data}热力值`)
+      } catch (e) {
+        $.logErr(e, resp);
+      } finally {
+        resolve(data);
+      }
+    })
+  })
+}
+
 function taskCoin(type) {
   return new Promise((resolve) => {
-    const body = {"type":type,"apiMapping":"/active/taskCoin"}
-    $.get(taskurl(body), (err, resp, data) => {
+      
+    const url = `{"type":${type},"apiMapping":"/active/taskCoin"}`;
+    $.post(taskurl(url), (err, resp, data) => {
       try {
+        // console.log('homeGoBrowse', data)
         data = JSON.parse(data);
+        // console.log('homeGoBrowse', data)
+        // console.log(`成功领取${data.data}热力值`)
       } catch (e) {
         $.logErr(e, resp);
       } finally {
@@ -326,7 +399,7 @@ async function getAward() {
           break;
         }
       }
-      if (message) allMessage += `京东账号${$.index} ${$.nickName}\n${message}抽奖详情查看 https://blindbox5g.jd.com/#/myPrize${$.index !== cookiesArr.length ? '\n\n' : ''}`
+      if (message) allMessage += `京东账号${$.index} ${$.nickName}\n${message}抽奖详情查看 https://isp5g.m.jd.com/#/myPrize${$.index !== cookiesArr.length ? '\n\n' : ''}`
     } else {
       console.log(`目前热力值${total},不够抽奖`)
     }
@@ -335,10 +408,13 @@ async function getAward() {
 //获取有多少热力值
 function coin() {
   return new Promise((resolve) => {
-    const body = {"apiMapping":"/active/coin"}
-    $.post(taskurl(body), (err, resp, data) => {
+    const url = `{"apiMapping":"/active/coin"}`;
+    $.post(taskurl(url), (err, resp, data) => {
       try {
+        // console.log('homeGoBrowse', data)
         data = JSON.parse(data);
+        // console.log('homeGoBrowse', data)
+        // console.log(`成功领取${data.data}热力值`)
       } catch (e) {
         $.logErr(e, resp);
       } finally {
@@ -350,10 +426,13 @@ function coin() {
 //抽奖API
 function lottery() {
   return new Promise((resolve) => {
-    const body = {"apiMapping":"/prize/lottery"}
-    $.post(taskurl(body), (err, resp, data) => {
+    const url = `{"apiMapping":"/prize/lottery"}`;
+    $.post(taskurl(url), (err, resp, data) => {
       try {
+        // console.log('homeGoBrowse', data)
         data = JSON.parse(data);
+        // console.log('homeGoBrowse', data)
+        // console.log(`成功领取${data.data}热力值`)
       } catch (e) {
         $.logErr(e, resp);
       } finally {
@@ -362,57 +441,70 @@ function lottery() {
     })
   })
 }
+
+
+
 function shareUrl() {
   return new Promise((resolve) => {
-    const body = {"apiMapping":"/active/shareUrl"}
-    $.get(taskurl(body), async (err, resp, data) => {
-      try {
+    const url = `{"apiMapping":"/active/shareUrl"}`;
+    $.post(taskurl(url), (err, resp, data) => {
+        //$.log(data)
+   try {
+        console.log('好友邀请码', data)
         data = JSON.parse(data);
         if (data['code'] === 5000) {
           console.log(`尝试多次运行脚本即可获取好友邀请码`)
         }
+        // console.log('homeGoBrowse', data)
         if (data['code'] === 200) {
           if (data['data']) $.shareId.push(data['data']);
           console.log(`\n【京东账号${$.index}（${$.nickName || $.UserName}）的${$.name}好友互助码】${data['data']}\n`);
           console.log(`此邀请码一天一变化，旧的不可用`)
         }
-      } catch (e) {
+      }catch (e) {
         $.logErr(e, resp);
       } finally {
-        resolve();
+        resolve(data);
       }
     })
   })
 }
-function taskurl(body = {}) {
+
+
+
+
+
+function taskurl(url) {
   return {
-    'url': `${JD_API_HOST}?appid=blind-box&functionId=blindbox_prod&body=${JSON.stringify(body)}&t=${Date.now()}&loginType=2`,
+    'url': `${JD_API_HOST}`,
+    'body':`appid=blind-box&functionId=blindbox_prod&body=${url}&t=1629620993274&loginType=2`,
     'headers': {
-      "accept": "application/json, text/plain, */*",
+      "accept": "*/*",
       "accept-encoding": "gzip, deflate, br",
-      "accept-language": "zh-cn",
+      "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
       "content-type": "application/x-www-form-urlencoded",
-      'origin': 'https://blindbox5g.jd.com',
       "cookie": cookie,
       "referer": "https://blindbox5g.jd.com",
+      'Origin': 'https://blindbox5g.jd.com',
       "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
     }
   }
 }
 function updateShareCodesCDN(url) {
   return new Promise(resolve => {
-    const options = {
-      url: `${url}?${new Date()}`, "timeout": 10000, headers: {
-        "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
-      }
-    };
-    $.get(options, async (err, resp, data) => {
+    $.get({
+      url ,
+      timeout: 10000,
+      headers:{"User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")}}, async (err, resp, data) => {
       try {
         if (err) {
           console.log(`${JSON.stringify(err)}`)
           console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           $.updatePkActivityIdRes = JSON.parse(data);
+          if ($.updatePkActivityIdRes && $.updatePkActivityIdRes.length) {
+            // $.shareId = $.updatePkActivityIdRes || [];
+          }
         }
       } catch (e) {
         $.logErr(e, resp)
