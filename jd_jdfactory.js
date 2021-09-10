@@ -3,11 +3,8 @@ Last Modified time: 2020-12-26 22:58:02
 东东工厂，不是京喜工厂
 活动入口：京东APP首页-数码电器-东东工厂
 免费产生的电量(10秒1个电量，500个电量满，5000秒到上限不生产，算起来是84分钟达到上限)
-故建议1小时运行一次
-开会员任务和去京东首页点击“数码电器任务目前未做
-不会每次运行脚本都投入电力
-只有当心仪的商品存在，并且收集起来的电量满足当前商品所需电力，才投入
-3 4-23/4 * * * jd_jdfactory.js
+
+3 4-23/2 * * * jd_jdfactory.js
  */
 const $ = new Env('东东工厂');
 
@@ -599,7 +596,30 @@ function jdfactory_getHomeData() {
     })
   })
 }
-
+function readShareCode() {
+  console.log(`开始`)
+  return new Promise(async resolve => {
+    $.get({url: `https://cdn.nz.lu/api/ddfactory/${randomCount}`, headers:{'Host':'api.sharecode.ga'}, timeout: 1}, (err, resp, data) => {
+      try {
+        if (err) {
+          // console.log(`${JSON.stringify(err)}`)
+          // console.log(`${$.name} API请求失败，请检查网路重试`)
+        } else {
+          if (data) {
+            console.log(`随机取${randomCount}个码放到您固定的互助码后面(不影响已有固定互助)`)
+            data = JSON.parse(data);
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp)
+      } finally {
+        resolve(data);
+      }
+    })
+    await $.wait(10000);
+    resolve()
+  })
+}
 //格式化助力码
 function shareCodesFormat() {
   return new Promise(async resolve => {
@@ -612,10 +632,10 @@ function shareCodesFormat() {
       const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
       $.newShareCodes = inviteCodes[tempIndex].split('@');
     }
-    //const readShareCodeRes = await readShareCode();
-    //if (readShareCodeRes && readShareCodeRes.code === 200) {
-      //$.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
-    //}
+    // const readShareCodeRes = await readShareCode();
+    // if (readShareCodeRes && readShareCodeRes.code === 200) {
+    //   $.newShareCodes = [...new Set([...$.newShareCodes, ...(readShareCodeRes.data || [])])];
+    // }
     console.log(`第${$.index}个京东账号将要助力的好友${JSON.stringify($.newShareCodes)}`)
     resolve();
   })
