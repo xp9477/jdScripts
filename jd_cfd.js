@@ -1,10 +1,5 @@
 /*
 京喜财富岛
-cron 5 * * * * jd_cfd.js
-更新时间：2021-7-13
-活动入口：京喜APP-我的-京喜财富岛
-
-#京喜财富岛
 5 3-23/4 * * * jd_cfd.js
  */
 !function (t, r) { "object" == typeof exports ? module.exports = exports = r() : "function" == typeof define && define.amd ? define([], r) : t.CryptoJS = r() }(this, function () {
@@ -48,7 +43,7 @@ $.appId = 10028;
   await $.wait(1000)
   let res = await getAuthorShareCode('')
   if (!res) {
-    $.http.get({url: ''}).then((resp) => {}).catch((e) => console.log('', e));
+    $.http.get({url: ''}).then((resp) => {}).catch((e) => console.log('刷新CDN异常', e));
     await $.wait(1000)
     res = await getAuthorShareCode('')
   }
@@ -134,6 +129,20 @@ async function cfd() {
         console.log(`初始化失败\n`)
         return
       }
+    }
+
+    // 寻宝
+    console.log(`寻宝`)
+    let XBDetail = beginInfo.XbStatus.XBDetail.filter((x) => x.dwRemainCnt !== 0)
+    if (XBDetail.length !== 0) {
+      console.log(`开始寻宝`)
+      for (let key of Object.keys(XBDetail)) {
+        let vo = XBDetail[key]
+        await $.wait(2000)
+        await TreasureHunt(vo.strIndex)
+      }
+    } else {
+      console.log(`暂无宝物`)
     }
 
     //每日签到
@@ -263,14 +272,40 @@ async function cfd() {
         `【💵财富值】${endInfo.ddwRichBalance}\n`,
     );
 
-    // $.result.push(
-    //     `【京东账号${$.index}】${$.nickName || $.UserName}`,
-    //     `【💵财富值】任务前: ${beginInfo.ddwRichBalance}\n【💵财富值】任务后: ${endInfo.ddwRichBalance}`,
-    //     `【💵财富值】净增值: ${endInfo.ddwRichBalance - beginInfo.ddwRichBalance}\n`
-    // );
   } catch (e) {
     $.logErr(e)
   }
+}
+
+// 寻宝
+function TreasureHunt(strIndex) {
+  return new Promise((resolve) => {
+    $.get(taskUrl(`user/TreasureHunt`, `strIndex=${strIndex}`), (err, resp, data) => {
+      try {
+        if (err) {
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} TreasureHunt API请求失败，请检查网路重试`)
+        } else {
+          data = JSON.parse(data);
+          if (data.iRet === 0) {
+            if (data.AwardInfo.dwAwardType === 0) {
+              console.log(`${data.strAwardDesc}，获得 ${data.AwardInfo.ddwValue} 金币`)
+            } else if (data.AwardInfo.dwAwardType === 1) {
+              console.log(`${data.strAwardDesc}，获得 ${data.AwardInfo.ddwValue} 财富`)
+            } else {
+              console.log(JSON.stringify(data))
+            }
+          } else {
+            console.log(`寻宝失败：${data.sErrMsg}`)
+          }
+        }
+      } catch (e) {
+        $.logErr(e, resp);
+      } finally {
+        resolve();
+      }
+    })
+  })
 }
 
 // 合成珍珠
@@ -572,12 +607,12 @@ async function getTakeAggrPage(type) {
               console.log(`${$.name} GetTakeAggrPage API请求失败，请检查网路重试`)
             } else {
               data = JSON.parse(data);
-              console.log(`每日签到`)
+              console.log(`\n每日签到`)
               for (let key of Object.keys(data.Data.Sign.SignList)) {
                 let vo = data.Data.Sign.SignList[key]
                 if (vo.dwDayId === data.Data.Sign.dwTodayId) {
                   if (vo.dwStatus !== 1) {
-                    const body = `ddwCoin=${vo.ddwCoin}&ddwMoney=${vo.ddwMoney}&dwPrizeType=${vo.dwPrizeType}&strPrizePool=${vo.strPrizePool}&dwPrizeLv=${vo.dwBingoLevel}`
+                    const body = `ddwCoin=${vo.ddwCoin}&ddwMoney=${vo.ddwMoney}&dwPrizeType=${vo.dwPrizeType}&strPrizePool=${vo.strPrizePool}&dwPrizeLv=${vo.dwBingoLevel}&strPgUUNum=${token['farm_jstoken']}&strPgtimestamp=${token['timestamp']}&strPhoneID=${token['phoneid']}`
                     await rewardSign(body)
                     await $.wait(2000)
                   } else {
@@ -607,7 +642,7 @@ async function getTakeAggrPage(type) {
                 let vo = data.Data.Sign.SignList[key]
                 if (vo.dwDayId === data.Data.Sign.dwTodayId) {
                   if (vo.dwStatus !== 1) {
-                    const body = `ddwCoin=${vo.ddwCoin}&ddwMoney=${vo.ddwMoney}&dwPrizeType=${vo.dwPrizeType}&strPrizePool=${vo.strPrizePool}&dwPrizeLv=${vo.dwBingoLevel}`
+                    const body = `ddwCoin=${vo.ddwCoin}&ddwMoney=${vo.ddwMoney}&dwPrizeType=${vo.dwPrizeType}&strPrizePool=${vo.strPrizePool}&dwPrizeLv=${vo.dwBingoLevel}&strPgUUNum=${token['farm_jstoken']}&strPgtimestamp=${token['timestamp']}&strPhoneID=${token['phoneid']}`
                     await rewardSign(body, 6)
                     await $.wait(2000)
                   } else {
@@ -1217,7 +1252,8 @@ function getUserInfo(showInvite = true) {
             dwLandLvl,
             LeadInfo = {},
             StoryInfo = {},
-            Business = {}
+            Business = {},
+            XbStatus = {}
           } = data;
           if (showInvite) {
             console.log(`\n获取用户信息：${sErrMsg}\n${$.showLog ? data : ""}`);
@@ -1236,7 +1272,8 @@ function getUserInfo(showInvite = true) {
             strMyShareId,
             dwLandLvl,
             LeadInfo,
-            StoryInfo
+            StoryInfo,
+            XbStatus
           };
           resolve({
             buildInfo,
@@ -1244,7 +1281,8 @@ function getUserInfo(showInvite = true) {
             ddwCoinBalance,
             strMyShareId,
             LeadInfo,
-            StoryInfo
+            StoryInfo,
+            XbStatus
           });
         }
       } catch (e) {
@@ -1592,8 +1630,8 @@ function readShareCode() {
     }, (err, resp, data) => {
       try {
         if (err) {
-          //console.log(`${JSON.stringify(err)}`)
-          //console.log(`${$.name} API请求失败，请检查网路重试`)
+          console.log(`${JSON.stringify(err)}`)
+          console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
             console.log(`随机取${randomCount}个码放到您固定的互助码后面(不影响已有固定互助)`)
