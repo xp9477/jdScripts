@@ -4,10 +4,8 @@
 修改自 @yangtingxiao 抽奖机脚本
 活动入口：京东APP首页-闪购-闪购盲盒
 网页地址：https://h5.m.jd.com/babelDiy/Zeus/3vzA7uGuWL2QeJ5UeecbbAVKXftQ/index.html
-更新地址：https://gitee.com/lxk0301/jd_scripts/raw/master/jd_sgmh.js
 
 20 8 * * * jd_sgmh.js
-
  */
 const $ = new Env('闪购盲盒');
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -298,13 +296,16 @@ function readShareCode() {
   console.log(`开始`)
   return new Promise(async resolve => {
     $.get({
-      url: `http://share.turinglabs.net/api/v3/sgmh/query/${randomCount}/`,
-      'timeout': 10000
+      url: `https://cdn.nz.lu/api/sgmh/${randomCount}`,
+      headers: {
+        'Host':'api.sharecode.ga'
+      },
+      timeout: 1
     }, (err, resp, data) => {
       try {
         if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
+          // console.log(`${JSON.stringify(err)}`)
+          // console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
             console.log(`随机取${randomCount}个码放到您固定的互助码后面(不影响已有固定互助)`)
