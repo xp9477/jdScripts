@@ -1,14 +1,8 @@
 /*
 种豆得豆 脚本更新地址：https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_plantBean.js
-更新时间：2021-04-9
+更新时间：2021-09-10
 活动入口：京东APP我的-更多工具-种豆得豆
-
-注：会自动关注任务中的店铺跟商品，介意者勿使用。
-互助码shareCode请先手动运行脚本查看打印可看到
-每个京东账号每天只能帮助3个人。多出的助力码将会助力失败。
-
 1 7-21/2 * * * jd_plantBean.js
-
 */
 const $ = new Env('京东种豆得豆');
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -20,12 +14,9 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
 //助力好友分享码(最多3个,否则后面的助力失败)
 //此此内容是IOS用户下载脚本到本地使用，填写互助码的地方，同一京东账号的好友互助码请使用@符号隔开。
 //下面给出两个账号的填写示例（iOS只支持2个京东账号）
-let shareCodes = [ // IOS本地脚本用户这个列表填入你要助力的好友的shareCode
-  //账号一的好友shareCode,不同好友的shareCode中间用@符号隔开
-  'xo6o4xo6qs6t4idykxwnke3bpcy34pacxfo36ni@7qol36k2wexaktbcnyqnntlsuqek44ydwt7wkuy@4npkonnsy7xi2v6y5yxp2kiu4m2gf37me3csuyi@4oupleiwuds2atxhnqabzrpgawdzslixpobqpky@nfhmmggvv57lgc2bxgtcyrckrq@vvea6hsbemvs5omhhyga7tpgoi',
-  //账号二的好友shareCode,不同好友的shareCode中间用@符号隔开
-  'xo6o4xo6qs6t4idykxwnke3bpcy34pacxfo36ni@7qol36k2wexaktbcnyqnntlsuqek44ydwt7wkuy@4npkonnsy7xi2v6y5yxp2kiu4m2gf37me3csuyi@4oupleiwuds2atxhnqabzrpgawdzslixpobqpky@nfhmmggvv57lgc2bxgtcyrckrq@vvea6hsbemvs5omhhyga7tpgoi',
-]
+let shareCodes = [
+'xo6o4xo6qs6t4idykxwnke3bpcy34pacxfo36ni@7qol36k2wexaktbcnyqnntlsuqek44ydwt7wkuy@4npkonnsy7xi2v6y5yxp2kiu4m2gf37me3csuyi@4oupleiwuds2atxhnqabzrpgawdzslixpobqpky@nfhmmggvv57lgc2bxgtcyrckrq@vvea6hsbemvs5omhhyga7tpgoi',
+'xo6o4xo6qs6t4idykxwnke3bpcy34pacxfo36ni@7qol36k2wexaktbcnyqnntlsuqek44ydwt7wkuy@4npkonnsy7xi2v6y5yxp2kiu4m2gf37me3csuyi@4oupleiwuds2atxhnqabzrpgawdzslixpobqpky@nfhmmggvv57lgc2bxgtcyrckrq@vvea6hsbemvs5omhhyga7tpgoi']
 let allMessage = ``;
 let currentRoundId = null;//本期活动id
 let lastRoundId = null;//上期id
@@ -92,6 +83,26 @@ async function jdPlantBean() {
       const shareUrl = $.plantBeanIndexResult.data.jwordShareInfo.shareUrl
       $.myPlantUuid = getParam(shareUrl, 'plantUuid')
       console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.myPlantUuid}\n`);
+
+      // ***************************
+      // 报告运行次数
+      $.get({
+        url: `https://cdn.nz.lu/api/runTimes?activityId=bean&sharecode=${$.myPlantUuid}`,
+        headers: {
+          'Host': 'api.sharecode.ga'
+        },
+        timeout: 10000
+      }, (err, resp, data) => {
+        if (err) {
+          console.log('上报失败', err)
+        } else {
+          if (data === '1' || data === '0') {
+            console.log('上报成功')
+          }
+        }
+      })
+      // ***************************
+
       roundList = $.plantBeanIndexResult.data.roundList;
       currentRoundId = roundList[num].roundId;//本期的roundId
       lastRoundId = roundList[num - 1].roundId;//上期的roundId
@@ -529,11 +540,11 @@ async function plantBeanIndex() {
 }
 function readShareCode() {
   return new Promise(async resolve => {
-    $.get({url: `http://share.turinglabs.net/api/v3/bean/query/${randomCount}/`, timeout: 10000}, (err, resp, data) => {
+    $.get({url: `https://cdn.nz.lu/api/bean/${randomCount}`, headers:{'Host':'api.sharecode.ga'}, timeout: 1}, (err, resp, data) => {
       try {
         if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
+          // console.log(`${JSON.stringify(err)}`)
+          // console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
             console.log(`随机取个${randomCount}码放到您固定的互助码后面(不影响已有固定互助)`)
