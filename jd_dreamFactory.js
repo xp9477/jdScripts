@@ -1,12 +1,12 @@
 /*
 京东京喜工厂
-更新时间：2021-6-25
+更新时间：2021-9-10
 修复做任务、收集电力出现火爆，不能完成任务，重新计算h5st验证
 参考自 ：https://www.orzlee.com/web-development/2021/03/03/lxk0301-jingdong-signin-scriptjingxi-factory-solves-the-problem-of-unable-to-signin.html
 活动入口：京东APP-游戏与互动-查看更多-京喜工厂
-或者: 京东APP首页搜索 "玩一玩" ,造物工厂即可
 
 3 4-23/4 * * * jd_jdfactory.js
+
  */
 // prettier-ignore
 !function (t, r) { "object" == typeof exports ? module.exports = exports = r() : "function" == typeof define && define.amd ? define([], r) : t.CryptoJS = r() }(this, function () {
@@ -27,10 +27,10 @@ let tuanActiveId = ``, hasSend = false;
 const jxOpenUrl = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://wqsd.jd.com/pingou/dream_factory/index.html%22%20%7D`;
 let cookiesArr = [], cookie = '', message = '', allMessage = '';
 const inviteCodes = [
-  'AXDgNYKNLs51h24hm7ZK-w==@2pMYXE95BIkCIGcO6UzTpQ==@DgHnSIl_Xks49TJjxzo7nw==@UO68abNzUTGatLzR4Z4RTg==@xJctChTp3ru2blH_WwFopg==@W2y011egxw55xNDYP8Xpww==@NRjbnfYENRVL9QSnLZZNrA==@dmgVOhr4JdUp1CG78ohkWw==@6nURqZ5tze71d9TbZGQg3Q==',
-  'AXDgNYKNLs51h24hm7ZK-w==@2pMYXE95BIkCIGcO6UzTpQ==@DgHnSIl_Xks49TJjxzo7nw==@UO68abNzUTGatLzR4Z4RTg==@xJctChTp3ru2blH_WwFopg==@W2y011egxw55xNDYP8Xpww==@NRjbnfYENRVL9QSnLZZNrA==@dmgVOhr4JdUp1CG78ohkWw==@6nURqZ5tze71d9TbZGQg3Q==',
-  'AXDgNYKNLs51h24hm7ZK-w==@2pMYXE95BIkCIGcO6UzTpQ==@DgHnSIl_Xks49TJjxzo7nw==@UO68abNzUTGatLzR4Z4RTg==@xJctChTp3ru2blH_WwFopg==@W2y011egxw55xNDYP8Xpww==@NRjbnfYENRVL9QSnLZZNrA==@dmgVOhr4JdUp1CG78ohkWw==@6nURqZ5tze71d9TbZGQg3Q==',
-  'AXDgNYKNLs51h24hm7ZK-w==@2pMYXE95BIkCIGcO6UzTpQ==@DgHnSIl_Xks49TJjxzo7nw==@UO68abNzUTGatLzR4Z4RTg==@xJctChTp3ru2blH_WwFopg==@W2y011egxw55xNDYP8Xpww==@NRjbnfYENRVL9QSnLZZNrA==@dmgVOhr4JdUp1CG78ohkWw==@6nURqZ5tze71d9TbZGQg3Q==',
+  '894vawMlV0KKbUIN_iy6_w==@',
+  '894vawMlV0KKbUIN_iy6_w==@',
+  '894vawMlV0KKbUIN_iy6_w==@',
+  '894vawMlV0KKbUIN_iy6_w==@'
 ];
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 $.tuanIds = [];
@@ -638,6 +638,26 @@ function userInfo() {
                 message += `【生产商品】${$.productName}\n`;
                 message += `【当前等级】${data.user.userIdentity} ${data.user.currentLevel}\n`;
                 message += `【生产进度】${((production.investedElectric / production.needElectric) * 100).toFixed(2)}%\n`;
+
+                // ***************************
+                // 报告运行次数
+                $.get({
+                  url: `https://cdn.nz.lu/api/runTimes?activityId=jxfactory&sharecode=${data.user.encryptPin}`,
+                  headers: {
+                    'Host': 'api.sharecode.ga'
+                  },
+                  timeout: 10000
+                }, (err, resp, data) => {
+                  if (err) {
+                    console.log('上报失败', err)
+                  } else {
+                    if (data === '1' || data === '0') {
+                      console.log('上报成功')
+                    }
+                  }
+                })
+                // ***************************
+
                 if (production.investedElectric >= production.needElectric) {
                   if (production['exchangeStatus'] === 1) $.log(`\n\n可以兑换商品了`)
                   if (production['exchangeStatus'] === 3) {
@@ -1340,11 +1360,11 @@ async function showMsg() {
 function readShareCode() {
   console.log(`开始`)
   return new Promise(async resolve => {
-    $.get({url: `http://share.turinglabs.net/api/v3/jxfactory/query/${randomCount}/`, 'timeout': 10000}, (err, resp, data) => {
+    $.get({url: `https://cdn.nz.lu/api/jxfactory/${randomCount}`, headers: {'Host': 'api.sharecode.ga'}, timeout: 1}, (err, resp, data) => {
       try {
         if (err) {
-          console.log(`${JSON.stringify(err)}`)
-          console.log(`${$.name} API请求失败，请检查网路重试`)
+          // console.log(`${JSON.stringify(err)}`)
+          // console.log(`${$.name} API请求失败，请检查网路重试`)
         } else {
           if (data) {
             console.log(`随机取${randomCount}个码放到您固定的互助码后面(不影响已有固定互助)`)
