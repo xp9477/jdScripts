@@ -9,7 +9,7 @@ Some Functions Modified From https://github.com/Zero-S1/JD_tools/blob/master/JD_
 =================QuantumultX==============
 [task_local]
 #东东超市
-11 0,6-23/2 * * * jd_superMarket.js
+11 0,6-23/2 * * * jd_superMarket_xh.js
  */
 const $ = new Env('东东超市');
 //Node.js用户请在jdCookie.js处填写京东ck;
