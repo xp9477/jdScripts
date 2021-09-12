@@ -107,7 +107,7 @@ async function all(cookie, jrBody) {
       await JingDongBean(0); //京东京豆
       await JingDongStore(Wait(stop)); //京东超市
       await JingRongSteel(Wait(stop), jrBody); //金融钢镚
-      await JingDongTurn(Wait(stop)); //京东转盘
+      // await JingDongTurn(Wait(stop)); //京东转盘
       await JDFlashSale(Wait(stop)); //京东闪购
       await JingDongCash(Wait(stop)); //京东现金红包
       await JDMagicCube(Wait(stop), 2); //京东小魔方
@@ -133,7 +133,7 @@ async function all(cookie, jrBody) {
       await JDUserSignPre(Wait(stop), 'JDHealth', '京东商城-健康', 'w2oeK5yLdHqHvwef7SMMy4PL8LF'); //京东健康
       await JDUserSignPre(Wait(stop), 'JDShoes', '京东商城-鞋靴', '4RXyb1W4Y986LJW8ToqMK14BdTD'); //京东鞋靴
       await JDUserSignPre(Wait(stop), 'JDChild', '京东商城-童装', '3Af6mZNcf5m795T8dtDVfDwWVNhJ'); //京东童装馆
-      await JDUserSignPre(Wait(stop), 'JDBaby', '京东商城-母婴', '3BbAVGQPDd6vTyHYjmAutXrKAos6'); //京东母婴馆
+      // await JDUserSignPre(Wait(stop), 'JDBaby', '京东商城-母婴', '3BbAVGQPDd6vTyHYjmAutXrKAos6'); //京东母婴馆
       await JDUserSignPre(Wait(stop), 'JD3C', '京东商城-数码', '4SWjnZSCTHPYjE5T7j35rxxuMTb6'); //京东数码电器馆
       await JDUserSignPre(Wait(stop), 'JDWomen', '京东商城-女装', 'DpSh7ma8JV7QAxSE2gJNro8Q2h9'); //京东女装馆
       await JDUserSignPre(Wait(stop), 'JDBook', '京东商城-图书', '3SC6rw5iBg66qrXPGmZMqFDwcyXi'); //京东图书
