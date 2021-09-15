@@ -3,9 +3,23 @@
 活动结束时间未知
 活动入口：京东APP首页-京东直播
 地址：https://h5.m.jd.com/babelDiy/Zeus/2zwQnu4WHRNfqMSdv69UPgpZMnE2/index.html/
+已支持IOS双京东账号,Node.js支持N个京东账号
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+============Quantumultx===============
+[task_local]
+#京东直播
+50 12-14 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_live.js, tag=京东直播, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 
-10-20/5 12 * * * jd_live.js
-*/
+================Loon==============
+[Script]
+cron "50 12-14 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_live.js,tag=京东直播
+
+===============Surge=================
+京东直播 = type=cron,cronexp="50 12-14 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_live.js
+
+============小火箭=========
+京东直播 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_live.js, cronexpr="50 12-14 * * *", timeout=3600, enable=true
+ */
 const $ = new Env('京东直播');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
