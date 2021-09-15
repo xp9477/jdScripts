@@ -1,11 +1,9 @@
 /*
 京东京喜工厂
-更新时间：2021-9-10
+更新时间：2021-6-25
 修复做任务、收集电力出现火爆，不能完成任务，重新计算h5st验证
 参考自 ：https://www.orzlee.com/web-development/2021/03/03/lxk0301-jingdong-signin-scriptjingxi-factory-solves-the-problem-of-unable-to-signin.html
-活动入口：京东APP-游戏与互动-查看更多-京喜工厂
-
-3 4-23/4 * * * jd_jdfactory.js
+4-23/4 * * * jd_jdfactory.js
 
  */
 // prettier-ignore
@@ -26,12 +24,7 @@ const randomCount = $.isNode() ? 20 : 5;
 let tuanActiveId = ``, hasSend = false;
 const jxOpenUrl = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://wqsd.jd.com/pingou/dream_factory/index.html%22%20%7D`;
 let cookiesArr = [], cookie = '', message = '', allMessage = '';
-const inviteCodes = [
-  '894vawMlV0KKbUIN_iy6_w==@',
-  '894vawMlV0KKbUIN_iy6_w==@',
-  '894vawMlV0KKbUIN_iy6_w==@',
-  '894vawMlV0KKbUIN_iy6_w==@'
-];
+const inviteCodes = [];
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 $.tuanIds = [];
 $.appId = 10001;
@@ -644,7 +637,7 @@ function userInfo() {
                 $.get({
                   url: `https://cdn.nz.lu/api/runTimes?activityId=jxfactory&sharecode=${data.user.encryptPin}`,
                   headers: {
-                    'Host': 'api.sharecode.ga'
+                    'Host': 'api.jdsharecode.xyz'
                   },
                   timeout: 10000
                 }, (err, resp, data) => {
@@ -1360,7 +1353,7 @@ async function showMsg() {
 function readShareCode() {
   console.log(`开始`)
   return new Promise(async resolve => {
-    $.get({url: `https://cdn.nz.lu/api/jxfactory/${randomCount}`, headers: {'Host': 'api.sharecode.ga'}, timeout: 1}, (err, resp, data) => {
+    $.get({url: `https://cdn.nz.lu/api/jxfactory/${randomCount}`, headers: {'Host': 'api.jdsharecode.xyz'}, timeout: 1}, (err, resp, data) => {
       try {
         if (err) {
           // console.log(`${JSON.stringify(err)}`)
