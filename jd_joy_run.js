@@ -1,12 +1,15 @@
 /*
+Last Modified time: 2021-6-6 21:22:37
+宠汪汪邀请助力与赛跑助力脚本，感谢github@Zero-S1提供帮助
+活动入口：京东APP我的-更多工具-宠汪汪
+token时效很短，几个小时就失效了,闲麻烦的放弃就行
+每天拿到token后，可一次性运行完毕即可。
 互助码friendPin是京东用户名，不是昵称（可在京东APP->我的->设置 查看获得）
 token获取途径：
 1、微信搜索'来客有礼'小程序,登陆京东账号，点击底部的'我的'或者'发现'两处地方,即可获取Token，脚本运行提示token失效后，继续按此方法获取即可
 2、或者每天去'来客有礼'小程序->宠汪汪里面，领狗粮->签到领京豆 也可获取Token(此方法每天只能获取一次)
 脚本里面有内置提供的friendPin，如果你没有修改脚本或者BoxJs处填写自己的互助码，会默认给脚本内置的助力。
 
-docker 设置环境变量 JOY_RUN_HELP_MYSELF 为true,则开启账号内部互助.默认关闭(即给脚本作者内置的助力).
-# 宠汪汪邀请助力与赛跑助力
 15 10 * * * jd_joy_run.js 
 */
 let JOY_RUN_HELP_MYSELF = true
@@ -23,11 +26,11 @@ const JD_BASE_API = `https://draw.jdfcloud.com//pet`;
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : {};
 //下面给出好友邀请助力的示例填写规则
-let invite_pins = ['zhaosen2580,jd_47ee22449e303,jd_6c5e39478ec3b,jd_4346918b58d6e,liuz9988,88489948,jd_61f1269fd3236'];
+let invite_pins = ['zhaosen2580,jd_47ee22449e303,jd_6c5e39478ec3b,jd_4346918b58d6e,liuz9988,88489948,jd_61f1269fd3236,jaysherlock'];
 //下面给出好友赛跑助力的示例填写规则
-let run_pins = ['zhaosen2580,jd_47ee22449e303,jd_6c5e39478ec3b,jd_4346918b58d6e,liuz9988,88489948,jd_61f1269fd3236'];
+let run_pins = ['zhaosen2580,jd_47ee22449e303,jd_6c5e39478ec3b,jd_4346918b58d6e,liuz9988,88489948,jd_61f1269fd3236,jaysherlock'];
 //friendsArr内置太多会导致IOS端部分软件重启,可PR过来(此处目的:帮别人助力可得30g狗粮)
-let friendsArr = ["zhaosen2580", "jd_47ee22449e303", "jd_6c5e39478ec3b", "jd_4346918b58d6e", "liuz9988", "88489948", "jd_61f1269fd3236"]
+let friendsArr = ["zhaosen2580", "jd_47ee22449e303", "jd_6c5e39478ec3b", "jd_4346918b58d6e", "liuz9988", "88489948", "jd_61f1269fd3236", "jaysherlock"]
 
 
 //IOS等用户直接用NobyDa的jd cookie
@@ -319,7 +322,7 @@ async function invite(invite_pins) {
 function enterRoom(invitePin) {
   return new Promise(resolve => {
     let lkt = new Date().getTime()
-    let lks = $.md5('' + 'RtKLB8euDo7KwsO0' + lkt).toString()
+    let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
     headers['lkt'] = lkt;
     headers['lks'] = lks;
     headers.Cookie = cookie;
@@ -327,7 +330,7 @@ function enterRoom(invitePin) {
     headers['Content-Type'] = "application/json";
     let opt = {
       // url: "//jdjoy.jd.com/common/pet/getPetTaskConfig?reqSource=h5",
-      url: `//draw.jdfcloud.com/common/pet/enterRoom/h5?reqSource=h5&invitePin=${encodeURI(invitePin)}&inviteSource=task_invite&shareSource=weapp&inviteTimeStamp=${Date.now()}&invokeKey=RtKLB8euDo7KwsO0`,
+      url: `//draw.jdfcloud.com/common/pet/enterRoom/h5?reqSource=h5&invitePin=${encodeURI(invitePin)}&inviteSource=task_invite&shareSource=weapp&inviteTimeStamp=${Date.now()}&invokeKey=JL1VTNRadM68cIMQ`,
       method: "GET",
       data: {},
       credentials: "include",
@@ -359,14 +362,14 @@ function enterRoom(invitePin) {
 function helpInviteFriend(friendPin) {
   return new Promise((resolve) => {
     let lkt = new Date().getTime()
-    let lks = $.md5('' + 'RtKLB8euDo7KwsO0' + lkt).toString()
+    let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
     headers['lkt'] = lkt;
     headers['lks'] = lks;
     headers.Cookie = cookie;
     headers.LKYLToken = $.LKYLToken;
     let opt = {
       // url: "//jdjoy.jd.com/common/pet/getPetTaskConfig?reqSource=h5",
-      url: `//draw.jdfcloud.com/common/pet/helpFriend?friendPin=${encodeURI(friendPin)}&reqSource=h5&invokeKey=RtKLB8euDo7KwsO0`,
+      url: `//draw.jdfcloud.com/common/pet/helpFriend?friendPin=${encodeURI(friendPin)}&reqSource=h5&invokeKey=JL1VTNRadM68cIMQ`,
       method: "GET",
       data: {},
       credentials: "include",
@@ -434,14 +437,14 @@ async function run(run_pins) {
 function combatHelp(friendPin) {
   return new Promise(resolve => {
     let lkt = new Date().getTime()
-    let lks = $.md5('' + 'RtKLB8euDo7KwsO0' + lkt).toString()
+    let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
     headers['lkt'] = lkt;
     headers['lks'] = lks;
     headers.Cookie = cookie;
     headers.LKYLToken = $.LKYLToken;
     let opt = {
       // url: "//jdjoy.jd.com/common/pet/getPetTaskConfig?reqSource=h5",
-      url: `//draw.jdfcloud.com//common/pet/combat/help?friendPin=${encodeURI(friendPin)}&invokeKey=RtKLB8euDo7KwsO0`,
+      url: `//draw.jdfcloud.com//common/pet/combat/help?friendPin=${encodeURI(friendPin)}&invokeKey=JL1VTNRadM68cIMQ`,
       method: "GET",
       data: {},
       credentials: "include",
@@ -477,14 +480,14 @@ function combatHelp(friendPin) {
 function combatDetail(invitePin) {
   return new Promise(resolve => {
     let lkt = new Date().getTime()
-    let lks = $.md5('' + 'RtKLB8euDo7KwsO0' + lkt).toString()
+    let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
     headers['lkt'] = lkt;
     headers['lks'] = lks;
     headers.Cookie = cookie;
     headers.LKYLToken = $.LKYLToken;
     let opt = {
       // url: "//jdjoy.jd.com/common/pet/getPetTaskConfig?reqSource=h5",
-      url: `//draw.jdfcloud.com/common/pet/combat/detail/v2?help=true&inviterPin=${encodeURI(invitePin)}&reqSource=h5&invokeKey=RtKLB8euDo7KwsO0`,
+      url: `//draw.jdfcloud.com/common/pet/combat/detail/v2?help=true&inviterPin=${encodeURI(invitePin)}&reqSource=h5&invokeKey=JL1VTNRadM68cIMQ`,
       method: "GET",
       data: {},
       credentials: "include",
