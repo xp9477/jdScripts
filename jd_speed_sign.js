@@ -5,8 +5,22 @@
 
 活动时间：长期
 活动入口：京东极速版app-现金签到
+已支持IOS双京东账号,Node.js支持N个京东账号
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+============Quantumultx===============
+[task_local]
+#京东极速版
+21 3,8 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_speed_sign.js, tag=京东极速版, img-url=https://raw.githubusercontent.com/Orz-3/task/master/jd.png, enabled=true
 
-21 2,8,15 * * * jd_speed_sign.js
+================Loon==============
+[Script]
+cron "21 3,8 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_speed_sign.js,tag=京东极速版
+
+===============Surge=================
+京东极速版 = type=cron,cronexp="21 3,8 * * *",wake-system=1,timeout=33600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_speed_sign.js
+
+============小火箭=========
+京东极速版 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_speed_sign.js, cronexpr="21 3,8 * * *", timeout=33600, enable=true
 */
 
 const $ = new Env('京东极速版');
@@ -73,15 +87,15 @@ async function jdGlobal() {
     await apTaskList()
     await wheelsHome()
 
-    await signInit()
-    await sign()
+    // await signInit()
+    // await sign()
     await invite()
     await invite2()
     $.score = 0
     $.total = 0
     await taskList()
     await queryJoy()
-    await signInit()
+    // await signInit()
     await cash()
     await showMsg()
   } catch (e) {
@@ -661,9 +675,9 @@ function taskGetUrl(function_id, body) {
 function invite2() {
   let t = +new Date()
   let inviterId = [
-    "wXX9SjXOdYMWe5Ru/1+x9A==",
     "5V7vHE23qh2EkdBHXRFDuA==",
-    "4AVQao+eH8Q8kvmXnWmkG8ef/fNr5fdejnD9+9Ugbec="
+    "4AVQao+eH8Q8kvmXnWmkG8ef/fNr5fdejnD9+9Ugbec=",
+    "wXX9SjXOdYMWe5Ru/1+x9A=="
   ][Math.floor((Math.random() * 3))]
   let headers = {
     'Host': 'api.m.jd.com',
@@ -692,8 +706,9 @@ function invite() {
   let t = +new Date()
   let inviterId = [
     "5V7vHE23qh2EkdBHXRFDuA==",
-    "jbGBRBPo5DmwB9ntTCSVOGXuh1YQyccCuZpWwb3PlIc="
-  ][Math.floor((Math.random() * 2))]
+    "jbGBRBPo5DmwB9ntTCSVOGXuh1YQyccCuZpWwb3PlIc=",
+    "wXX9SjXOdYMWe5Ru/1+x9A=="
+  ][Math.floor((Math.random() * 3))]
   var headers = {
     'Host': 'api.m.jd.com',
     'accept': 'application/json, text/plain, */*',
