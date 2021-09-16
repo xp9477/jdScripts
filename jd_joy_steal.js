@@ -4,8 +4,23 @@ Last Modified time: 2021-6-6 10:22:37
 最近经常出现给偷好友积分与狗粮失败的情况，故建议cron设置为多次
 jd宠汪汪偷好友积分与狗粮,及给好友喂食
 偷好友积分上限是20个好友(即获得100积分)，帮好友喂食上限是20个好友(即获得200积分)，偷好友狗粮上限也是20个好友(最多获得120g狗粮)
+IOS用户支持京东双账号,NodeJs用户支持N个京东账号
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+如果开启了给好友喂食功能，建议先凌晨0点运行jd_joy.js脚本获取狗粮后，再运行此脚本(jd_joy_steal.js)可偷好友积分，6点运行可偷好友狗粮
+==========Quantumult X==========
+[task_local]
+#宠汪汪偷好友积分与狗粮
+10 0-21/3 * * * jd_joy_steal.js, tag=宠汪汪偷好友积分与狗粮, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jdcww.png, enabled=true
 
-10 1-21/5 * * * jd_joy_steal.js
+=======Loon========
+[Script]
+cron "10 0-21/3 * * *" script-path=jd_joy_steal.js,tag=宠汪汪偷好友积分与狗粮
+
+========Surge==========
+宠汪汪偷好友积分与狗粮 = type=cron,cronexp="10 0-21/3 * * *",wake-system=1,timeout=3600,script-path=jd_joy_steal.js
+
+=======小火箭=====
+宠汪汪偷好友积分与狗粮 = type=cron,script-path=jd_joy_steal.js, cronexpr="10 0-21/3 * * *", timeout=3600, enable=true
 */
 const $ = new Env('宠汪汪偷好友积分与狗粮');
 const zooFaker = require('./utils/JDJRValidator_Pure');
@@ -276,7 +291,7 @@ function enterRoom() {
     const host = `draw.jdfcloud.com`;
     const reqSource = 'weapp';
     let opt = {
-      url: `//draw.jdfcloud.com/common/pet/enterRoom/h5?invitePin=&openId=&invokeKey=RtKLB8euDo7KwsO0`,
+      url: `//draw.jdfcloud.com/common/pet/enterRoom/h5?invitePin=&openId=&invokeKey=JL1VTNRadM68cIMQ`,
       method: "GET",
       data: {},
       credentials: "include",
@@ -301,8 +316,8 @@ function enterRoom() {
 function getFriends(currentPage = '1') {
   return new Promise(resolve => {
     let opt = {
-      url: `//draw.jdfcloud.com//common/pet/api/getFriends?itemsPerPage=20&currentPage=${currentPage * 1}&invokeKey=RtKLB8euDo7KwsO0`,
-      // url: `//draw.jdfcloud.com/common/pet/getPetTaskConfig?reqSource=h5&invokeKey=RtKLB8euDo7KwsO0`,
+      url: `//draw.jdfcloud.com//common/pet/api/getFriends?itemsPerPage=20&currentPage=${currentPage * 1}&invokeKey=JL1VTNRadM68cIMQ`,
+      // url: `//draw.jdfcloud.com/common/pet/getPetTaskConfig?reqSource=h5&invokeKey=JL1VTNRadM68cIMQ`,
       method: "GET",
       data: {},
       credentials: "include",
@@ -310,7 +325,7 @@ function getFriends(currentPage = '1') {
     }
     const url = "https:"+ taroRequest(opt)['url'] + $.validate;
     let lkt = new Date().getTime()
-    let lks = $.md5('' + 'RtKLB8euDo7KwsO0' + lkt).toString()
+    let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
     const options = {
       url: url.replace(/reqSource=h5/, 'reqSource=weapp'),
       headers: {
@@ -491,7 +506,7 @@ function getRandomFood(friendPin) {
 function getCoinChanges() {
   return new Promise(resolve => {
     let opt = {
-      url: `//jdjoy.jd.com/common/pet/getCoinChanges?changeDate=${Date.now()}&invokeKey=RtKLB8euDo7KwsO0`,
+      url: `//jdjoy.jd.com/common/pet/getCoinChanges?changeDate=${Date.now()}&invokeKey=JL1VTNRadM68cIMQ`,
       // url: "//draw.jdfcloud.com/common/pet/getPetTaskConfig?reqSource=h5",
       method: "GET",
       data: {},
@@ -500,7 +515,7 @@ function getCoinChanges() {
     }
     const url = "https:"+ taroRequest(opt)['url'] + $.validate;
     let lkt = new Date().getTime()
-    let lks = $.md5('' + 'RtKLB8euDo7KwsO0' + lkt).toString()
+    let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
     const options = {
       url,
       headers: {
@@ -620,7 +635,7 @@ function TotalBean() {
 }
 function taskPostUrl(url, Host, reqSource) {
   let lkt = new Date().getTime()
-  let lks = $.md5('' + 'RtKLB8euDo7KwsO0' + lkt).toString()
+  let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
   return {
     url: url,
     headers: {
@@ -640,7 +655,7 @@ function taskPostUrl(url, Host, reqSource) {
 }
 function taskUrl(functionId, friendPin) {
   let opt = {
-    url: `//jdjoy.jd.com/common/pet/${functionId}?friendPin=${encodeURI(friendPin)}&invokeKey=RtKLB8euDo7KwsO0`,
+    url: `//jdjoy.jd.com/common/pet/${functionId}?friendPin=${encodeURI(friendPin)}&invokeKey=JL1VTNRadM68cIMQ`,
     // url: `//draw.jdfcloud.com/common/pet/getPetTaskConfig?reqSource=h5`,
     method: "GET",
     data: {},
@@ -649,7 +664,7 @@ function taskUrl(functionId, friendPin) {
   }
   const url = "https:"+ taroRequest(opt)['url'] + $.validate;
   let lkt = new Date().getTime()
-  let lks = $.md5('' + 'RtKLB8euDo7KwsO0' + lkt).toString()
+  let lks = $.md5('' + 'JL1VTNRadM68cIMQ' + lkt).toString()
   return {
     url,
     headers: {
