@@ -1,9 +1,22 @@
 /*
 内容鉴赏官
 更新时间：2021-09-09
-
+已支持IOS双京东账号,Node.js支持N个京东账号
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+============Quantumultx===============
+[task_local]
 #内容鉴赏官
-15 3,6 * * * jd_connoisseur.j
+15 3,6 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_connoisseur.js, tag=内容鉴赏官, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+
+================Loon==============
+[Script]
+cron "15 3,6 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_connoisseur.js,tag=内容鉴赏官
+
+===============Surge=================
+内容鉴赏官 = type=cron,cronexp="15 3,6 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_connoisseur.js
+
+============小火箭=========
+内容鉴赏官 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_connoisseur.js, cronexpr="15 3,6 * * *", timeout=3600, enable=true
  */
 const $ = new Env('内容鉴赏官');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -30,10 +43,7 @@ let allMessage = '';
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
-  let res = await getAuthorShareCode('')
-  if (!res) {
-    res = await getAuthorShareCode('')
-  }
+  let res = []
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
@@ -72,7 +82,7 @@ let allMessage = '';
             continue
           }
           $.delcode = false
-          await getTaskInfo("2", $.projectCode, $.taskCode, "24", "2", $.shareCodes[j].code)
+          await getTaskInfo("2", $.projectCode, $.taskCode, $.helpType, "2", $.shareCodes[j].code)
           await $.wait(2000)
           if ($.delcode) {
             $.shareCodes.splice(j, 1)
@@ -152,7 +162,7 @@ async function getActiveInfo(url = 'https://prodev.m.jd.com/mall/active/2y1S9xVY
 }
 async function getTaskInfo(type, projectId, assignmentId, ofn, helpType = '1', itemId = '') {
   let body = {"type":type,"projectId":projectId,"assignmentId":assignmentId,"doneHide":false}
-  if (ofn === "24") body['itemId'] = itemId; body['helpType'] = helpType
+  if (ofn === $.helpType) body['itemId'] = itemId; body['helpType'] = helpType
   return new Promise(async resolve => {
     $.post(taskUrl('interactive_info', body), async (err, resp, data) => {
       try {
@@ -199,7 +209,7 @@ async function getTaskInfo(type, projectId, assignmentId, ofn, helpType = '1', i
               } else {
                 console.log(data.message)
               }
-            } else if (ofn === "24") {
+            } else if (ofn === $.helpType) {
               if (helpType === '1') {
                 if (data.code === "0" && data.data) {
                   if (data.data[0].status !== "2") {
@@ -402,15 +412,16 @@ async function getshareCode() {
             data = JSON.parse(data)
             for (let key of Object.keys(data.floorList)) {
               let vo = data.floorList[key]
-              if (vo.ofn && vo.ofn === "20") {
+              if (vo.ofn && ((vo.ofn === "16" || vo.ofn === "18" || vo.ofn === "20") && vo.template === 'customcode')) {
                 await getTaskInfo("1", vo.boardParams.projectCode, vo.boardParams.taskCode, vo.ofn)
                 await $.wait(2000)
-              } else if (vo.ofn && vo.ofn === "24") {
+              } else if (vo.ofn && ((vo.ofn === "22" || vo.ofn === "24") && vo.template === 'customcode')) {
                 $.projectCode = vo.boardParams.projectCode
                 $.taskCode = vo.boardParams.taskCode
+                $.helpType = vo.ofn
               }
             }
-            await getTaskInfo("2", $.projectCode, $.taskCode, "24")
+            await getTaskInfo("2", $.projectCode, $.taskCode, $.helpType)
           }
         }
       } catch (e) {
