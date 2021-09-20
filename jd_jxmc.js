@@ -1,7 +1,23 @@
 /*
 京喜牧场
-15 3-15/3 * * * jd_jxmc.js
+更新时间：2021-8-20
+活动入口：京喜APP-我的-京喜牧场
+温馨提示：请先手动完成【新手指导任务】再运行脚本
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+============Quantumultx===============
+[task_local]
+#京喜牧场
+20 0-23/3 * * * jd_jxmc.js, tag=京喜牧场, img-url=https://github.com/58xinian/icon/raw/master/jdgc.png, enabled=true
 
+================Loon==============
+[Script]
+cron "20 0-23/3 * * *" script-path=jd_jxmc.js,tag=京喜牧场
+
+===============Surge=================
+京喜牧场 = type=cron,cronexp="20 0-23/3 * * *",wake-system=1,timeout=3600,script-path=jd_jxmc.js
+
+============小火箭=========
+京喜牧场 = type=cron,script-path=jd_jxmc.js, cronexpr="20 0-23/3 * * *", timeout=3600, enable=true
  */
 // prettier-ignore
 !function (t, r) { "object" == typeof exports ? module.exports = exports = r() : "function" == typeof define && define.amd ? define([], r) : t.CryptoJS = r() }(this, function () {
@@ -388,12 +404,12 @@ async function takeGetRequest(type) {
       myRequest = getGetRequest(`GetVisitBackCabbage`, url);
       break;
     case 'GetSignInfo':
-      url = `https://m.jingxi.com/jxmc/queryservice/GetSignInfo?channel=7&sceneid=1001&activeid=${$.activeid}&activekey=${$.activekey}&_stk=channel%2Csceneid&_ste=1`;
+      url = `https://m.jingxi.com/jxmc/queryservice/GetSignInfo?channel=7&sceneid=1001&activeid=${$.activeid}&activekey=${$.activekey}&jxmc_jstoken=${token['farm_jstoken']}&timestamp=${token['timestamp']}&phoneid=${token['phoneid']}&_stk=activeid%2Cactivekey%2Cchannel%2Cjxmc_jstoken%2Cphoneid%2Csceneid%2Ctimestamp&_ste=1`;
       url += `&h5st=${decrypt(Date.now(), '', '', url)}&_=${Date.now() + 2}&sceneval=2&g_login_type=1&callback=jsonpCBK${String.fromCharCode(Math.floor(Math.random() * 26) + "A".charCodeAt(0))}&g_ty=ls`;
       myRequest = getGetRequest(`GetSignInfo`, url);
       break;
     case 'GetSignReward':
-      url = `https://m.jingxi.com/jxmc/operservice/GetSignReward?channel=7&sceneid=1001&activeid=${$.activeid}&activekey=${$.activekey}&currdate=${$.GetSignInfo.currdate}&_stk=channel%2Ccurrdate%2Csceneid&_ste=1`;
+      url = `https://m.jingxi.com/jxmc/operservice/GetSignReward?channel=7&sceneid=1001&activeid=${$.activeid}&activekey=${$.activekey}&currdate=${$.GetSignInfo.currdate}&jxmc_jstoken=${token['farm_jstoken']}&timestamp=${token['timestamp']}&phoneid=${token['phoneid']}&_stk=activeid%2Cactivekey%2Cchannel%2Ccurrdate%2Cjxmc_jstoken%2Cphoneid%2Csceneid%2Ctimestamp&_ste=1`;
       url += `&h5st=${decrypt(Date.now(), '', '', url)}&_=${Date.now() + 2}&sceneval=2&g_login_type=1&callback=jsonpCBK${String.fromCharCode(Math.floor(Math.random() * 26) + "A".charCodeAt(0))}&g_ty=ls`;
       myRequest = getGetRequest(`GetSignReward`, url);
       break;
