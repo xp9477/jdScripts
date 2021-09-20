@@ -8,7 +8,7 @@
 const $ = new Env('影像馆');
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 const notify = $.isNode() ? require('./sendNotify') : '';
-let cookiesArr = ['pt_key=app_openAAJhQ00BADAEVxoqcJBiXEmFqGs2YDroXTURzVUwcb6xSVk8iPxETGjsFEYxncqLfpdqQuBtMVg;pt_pin=wdmfXJIJXsHPlz;'];
+let cookiesArr = [];
 if ($.isNode()) {
     Object.keys(jdCookieNode).forEach((item) => {
         cookiesArr.push(jdCookieNode[item])
@@ -30,12 +30,7 @@ if ($.isNode()) {
         $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
         return;
     }
-    let res = [];
-    // try{res = await getAuthorShareCode('https://raw.githubusercontent.com/star261/jd/main/code/museum.json');}catch (e) {}
-    // if(!res){
-    //     try{res = await getAuthorShareCode('https://gitee.com/star267/share-code/raw/master/museum.json');}catch (e) {}
-    //     if(!res){res = [];}
-    // }
+    let res = [];   
     if(res.length === 0){
         $.shareUuid = '61944';
     }else{
@@ -57,6 +52,7 @@ if ($.isNode()) {
             }
             continue
         }
+        $.shareUuid = '';
         await main();
     }
 })().catch((e) => {
@@ -124,7 +120,7 @@ async function takePost(type,body) {
             "Accept": "*/*",
             "Content-Type":"application/x-www-form-urlencoded",
             "Origin":"https://jmkj2-isv.isvjcloud.com",
-            "Referer": " https://jmkj2-isv.isvjcloud.com/",
+            "Referer": "https://jmkj2-isv.isvjcloud.com/",
             "apptoken":$.apptoken,
             "User-Agent": $.UA,
             "Accept-Language": "zh-cn",
@@ -162,7 +158,7 @@ async function takeGet(type) {
             "Accept": "*/*",
             "Content-Type":"application/x-www-form-urlencoded",
             "Origin":"https://jmkj2-isv.isvjcloud.com",
-            "Referer": " https://jmkj2-isv.isvjcloud.com/",
+            "Referer": "https://jmkj2-isv.isvjcloud.com/",
             "apptoken":$.apptoken,
             "User-Agent": $.UA,
             "Accept-Language": "zh-cn",
