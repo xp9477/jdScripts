@@ -2,9 +2,23 @@
 签到领现金，每日2毛～5毛
 可互助，助力码每日不变，只变日期
 活动入口：京东APP搜索领现金进入
-更新时间：2021-09-10
+更新时间：2021-06-07
+已支持IOS双京东账号,Node.js支持N个京东账号
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+============Quantumultx===============
+[task_local]
+#签到领现金
+2 0-23/4 * * * jd_cash.js, tag=签到领现金, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 
-2 0,11,17 * * * jd_cash.js
+================Loon==============
+[Script]
+cron "2 0-23/4 * * *" script-path=jd_cash.js,tag=签到领现金
+
+===============Surge=================
+签到领现金 = type=cron,cronexp="2 0-23/4 * * *",wake-system=1,timeout=3600,script-path=jd_cash.js
+
+============小火箭=========
+签到领现金 = type=cron,script-path=jd_cash.js, cronexpr="2 0-23/4 * * *", timeout=3600, enable=true
  */
 const $ = new Env('签到领现金');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -13,10 +27,13 @@ const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let jdNotify = true;//是否关闭通知，false打开通知推送，true关闭通知推送
 //IOS等用户直接用NobyDa的jd cookie
 let cookiesArr = [], cookie = '', message;
-let helpAuthor = false;
+let helpAuthor = true;
 const randomCount = $.isNode() ? 5 : 5;
-let cash_exchange = true;//是否消耗2元红包兑换200京豆，默认否
-const inviteCodes = []
+let cash_exchange = false;//是否消耗2元红包兑换200京豆，默认否
+const inviteCodes = [
+  `ZE9qOoTIH4ZOsha1lzk@eU9YK7voA4BhtxySiChQ@eU9YaLm1b_Ulo22EznoUhA@eU9YDq_oNYZfhRCSvzNF@eU9Ya-W0Zfki9mbUn3oQ0A@eU9YHrXgBbxbsiuivCBi@eU9Yabm2b64u9WfcnXUS1A`,
+  `ZE9qOoTIH4ZOsha1lzk@eU9YK7voA4BhtxySiChQ@eU9YaLm1b_Ulo22EznoUhA@eU9YDq_oNYZfhRCSvzNF@eU9Ya-W0Zfki9mbUn3oQ0A@eU9YHrXgBbxbsiuivCBi@eU9Yabm2b64u9WfcnXUS1A`,
+]
 if ($.isNode()) {
   Object.keys(jdCookieNode).forEach((item) => {
     cookiesArr.push(jdCookieNode[item])
@@ -438,7 +455,7 @@ function getSign(functionid, body, uuid) {
         Host,
         "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1 Edg/87.0.4280.88"
       },
-      timeout: 15000
+      timeout: 30 * 1000
     }
     $.post(options, (err, resp, data) => {
       try {
