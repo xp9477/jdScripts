@@ -35,7 +35,7 @@ if ($.isNode()) {
 }
 const JD_API_HOST = 'https://ddsj-dz.isvjcloud.com/dd-api';
 let allMessage = '';
-$.shareCodes = []
+$.shareCodes = ['0-j7BLbM4kJ14kUZfQpGGgkKlDpPZZ1LikY3pO87Zuk','9GegyiDVC_QmNYbf-JpbPWGpLQ9hXhpA4G8e_o6QXlw']
 let tokenInfo = {}, hotInfo = {}
 !(async () => {
   if (!cookiesArr[0]) {
