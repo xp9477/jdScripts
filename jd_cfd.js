@@ -16,7 +16,8 @@ const jdCookieNode = $.isNode() ? require("./jdCookie.js") : "";
 $.showLog = $.getdata("cfd_showLog") ? $.getdata("cfd_showLog") === "true" : false;
 $.notifyTime = $.getdata("cfd_notifyTime");
 $.result = [];
-$.shareCodes = [];
+$.shareCodes = ['5906987ED67ACBA281B31421A3AD7114A4BFF1E8BE65A522455236D274DFC9AA','6301BAD6E97F4630C892D7EFB3327A0B110FED2BA521F3825CDD63E5CD189FA5',
+'57A5A63E2012864B0F3819B44CFA64339D4A08135A4D6F268C8295CA7834E3C2'];
 let cookiesArr = [], cookie = '', token = '';
 let UA, UAInfo = {}
 let nowTimes;
