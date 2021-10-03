@@ -67,6 +67,8 @@ function collectScore() {
 								`任务完成成功，获得：${
 									data?.data?.result?.produceScore ?? "未知"
 								}能量`
+							console.log('resp: '+resp)
+							console.log('data: '+data)
 							);
 						else
 							console.log(
