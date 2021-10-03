@@ -63,10 +63,7 @@ function collectScore() {
 					data = $.toObj(data);
 					if (data?.data?.bizCode === 0) {
 						if (data?.data?.result?.produceScore)
-							console.log(
-								`任务完成成功，获得：${
-									data?.data?.result?.produceScore ?? "未知"
-								}能量`
+							console.log(`任务完成成功，获得：${data?.data?.result?.produceScore ?? "未知"}能量`
 							console.log('resp: '+resp)
 							console.log('data: '+data)
 							);
