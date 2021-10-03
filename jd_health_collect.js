@@ -75,8 +75,8 @@ function collectScore() {
 					} else {
 						console.log(`任务完成失败：${data?.data?.bizMsg ?? JSON.stringify(data)}`);
 					}
-					console.log('resp: '+resp);
-					console.log('data: '+data);
+					console.log('resp: '+JSON.stringify(resp));
+					console.log('data: '+JSON.stringify(data));
 				}
 			} catch (e) {
 				console.log(e);
