@@ -1,25 +1,36 @@
 /*
 口袋书店
-活动入口：京东app首页-京东图书-签到-下方横幅
-
+活动入口：京东app首页-京东图书-右侧口袋书店
+已支持IOS双京东账号,Node.js支持N个京东账号
+脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
+============Quantumultx===============
+[task_local]
 #口袋书店
-15 0 * * * jd_bookshop.js
+1 8,12,18 * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_bookshop.js, tag=口袋书店, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 
+================Loon==============
+[Script]
+cron "1 8,12,18 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_bookshop.js,tag=口袋书店
+
+===============Surge=================
+口袋书店 = type=cron,cronexp="1 8,12,18 * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_bookshop.js
+
+============小火箭=========
+口袋书店 = type=cron,script-path=https://gitee.com/lxk0301/jd_scripts/raw/master/jd_bookshop.js, cronexpr="1 8,12,18* * *", timeout=3600, enable=true
  */
 const $ = new Env('口袋书店');
 const notify = $.isNode() ? require('./sendNotify') : '';
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 //IOS等用户直接用NobyDa的jd cookie
-let cookiesArr = ['pt_key=AAJg9rmnADCa6mP6MoU4dUnpVlcCL_C32ud98tCA-CFqG_Xps7flXwqyPcWzhBnG7iLo2YiezH4;pt_pin=wdmfXJIJXsHPlz;'], cookie = '', message;
+let cookiesArr = [], cookie = '', message;
 const ACT_ID = 'dz2010100034444201', shareUuid = '28a699ac78d74aa3b31f7103597f8927'
 let ADD_CART = false
 ADD_CART = $.isNode() ? (process.env.PURCHASE_SHOPS ? process.env.PURCHASE_SHOPS : ADD_CART) : ($.getdata("ADD_CART") ? $.getdata("ADD_CART") : ADD_CART);
 // 加入购物车开关，与东东小窝共享
 
 let inviteCodes = [
-  '80510cf4f1bb4190a45e992ea35b1117',
-  '80510cf4f1bb4190a45e992ea35b1117',
+  '@'
 ]
 
 if ($.isNode()) {
@@ -76,7 +87,6 @@ async function jdBeauty() {
   await getActCk()
   await getActInfo()
   await getToken()
-  await accessLogWithAD()
   await getUserInfo()
   await getActContent(false, shareUuid)
   if ($.exit) return
@@ -88,7 +98,7 @@ async function jdBeauty() {
     console.log(`金币大于800，去抽奖`)
     while ($.gold >= 800) {
       await draw()
-      await $.wait(2000)
+      await $.wait(1000)
       $.gold -= 800
     }
   }
@@ -102,7 +112,7 @@ async function helpFriends() {
     if (!code) continue
     console.log(`去助力好友${code}`)
     await getActContent(true, code)
-    await $.wait(2000)
+    await $.wait(500)
   }
 }
 
@@ -253,35 +263,7 @@ function getUserInfo() {
     })
   })
 }
-// 获得用户信息
-function accessLogWithAD() {
-  return new Promise(resolve => {
-    let body = `venderId=${ $.shopId}&code=99&pin=${encodeURIComponent($.token)}&activityId=${ACT_ID}&pageUrl=https%3A%2F%2Flzdz-isv.isvjcloud.com%2Fdingzhi%2Fbook%2Fdevelop%2Factivity%3FactivityId%3Ddz2010100034444201%26lng%3D107.146945%26lat%3D33.255267%26sid%3Dcad74d1c843bd47422ae20cadf6fe5aw%26un_area%3D27_2442_2444_31912&subType=app&adSource=`
-    $.post(taskPostUrl('common/accessLogWithAD', body), async (err, resp, data) => {
-      try {
-        if (err) {
-          console.log(`${$.name} API请求失败，请检查网路重试`)
-        } else {
-    //      if (safeGet(data)) {
-          if($.isNode())
-            for (let ck of resp['headers']['set-cookie']) {
-              cookie = `${cookie}; ${ck.split(";")[0]};`
-            }
-          else{
-            for (let ck of resp['headers']['Set-Cookie'].split(',')) {
-              cookie = `${cookie}; ${ck.split(";")[0]};`
-            }
-          }
-       //   }
-        }
-      } catch (e) {
-        $.logErr(e, resp)
-      } finally {
-        resolve(data);
-      }
-    })
-  })
-}
+
 // 获得游戏信息
 function getActContent(info = false, shareUuid = '') {
   return new Promise(resolve => {
@@ -318,7 +300,7 @@ function getActContent(info = false, shareUuid = '') {
                       console.log(`去做${task.title}任务`)
                       for (let set of task.settings.filter(vo => vo.status === 0)) {
                         await doTask(set.type, set.value)
-                        await $.wait(2000)
+                        await $.wait(500)
                       }
                     }
                   } else if(task.title === '每日签到'){
@@ -328,14 +310,13 @@ function getActContent(info = false, shareUuid = '') {
                       for (let set of task.settings.filter(vo => vo.status === 0)) {
                         let res = await doTask(set.type, set.value)
                         if (res.result) break
-                        await $.wait(2000)
+                        await $.wait(500)
                       }
                     }
                   } else if (ADD_CART && ['加购商品'].includes(task.title)) {
                     if (task.okNum < task.dayMaxNum) {
                       console.log(`去做${task.title}任务`)
                       await doTask(task.settings[0].type, task.settings[0].value)
-                      await $.wait(2000)
                     }
                   }
                 }
@@ -682,7 +663,7 @@ function shareCodesFormat() {
     if ($.shareCodesArr[$.index - 1]) {
       $.newShareCodes = $.shareCodesArr[$.index - 1].split('@');
     } else {
-      console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
+     // console.log(`由于您第${$.index}个京东账号未提供shareCode,将采纳本脚本自带的助力码\n`)
       const tempIndex = $.index > inviteCodes.length ? (inviteCodes.length - 1) : ($.index - 1);
       $.newShareCodes = inviteCodes[tempIndex].split('@');
     }
