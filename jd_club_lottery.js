@@ -878,7 +878,7 @@ function superBrandTaskLottery() {
           if (data) {
             data = JSON.parse(data);
             if (data && data['code'] === '0') {
-              console.log(`超级摇一摇 抽奖失败：${data['data']}`);
+              console.log(`超级摇一摇 抽奖失败：${JSON.stringify(data)}`);
               if (data['data']['bizCode'] === "TK000") {
                 $.rewardComponent = data['data']['result']['rewardComponent'];
                 if ($.rewardComponent) {
