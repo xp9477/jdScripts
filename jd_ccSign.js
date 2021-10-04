@@ -6,22 +6,9 @@
 
 活动入口：领券中心
 更新时间：2021-08-23
-已支持IOS双京东账号,Node.js支持N个京东账号
-脚本兼容: QuantumultX, Surge, Loon, JSBox, Node.js
-============Quantumultx===============
-[task_local]
+
 #领券中心签到
-15 0 * * * https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_ccSign.js, tag=领券中心签到, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
-
-================Loon==============
-[Script]
-cron "15 0 * * *" script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_ccSign.js,tag=领券中心签到
-
-===============Surge=================
-领券中心签到 = type=cron,cronexp="15 0 * * *",wake-system=1,timeout=3600,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_ccSign.js
-
-============小火箭=========
-领券中心签到 = type=cron,script-path=https://raw.githubusercontent.com/Aaron-lv/sync/jd_scripts/jd_ccSign.js, cronexpr="15 0 * * *", timeout=3600, enable=true
+15 8 * * * jd_ccSign.js
  */
 const $ = new Env('领券中心签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
