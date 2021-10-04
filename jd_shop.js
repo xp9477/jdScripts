@@ -4,7 +4,7 @@
 更新时间：2020-11-03
 已支持IOS双京东账号,Node.js支持N个京东账号
 
-10 0 * * * jd_shop.js
+1 0 * * * jd_shop.js
 
 */
 const $ = new Env('进店领豆');
