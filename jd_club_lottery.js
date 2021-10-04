@@ -888,6 +888,8 @@ function superBrandTaskLottery() {
                   }
                 }
               } else if (data['data']['bizCode'] === "TK1703") {
+                console.log(`超级摇一摇 抽奖失败：${data['data']}`);
+
                 console.log(`超级摇一摇 抽奖失败：${data['data']['bizMsg']}`);
               } else {
                 console.log(`超级摇一摇 抽奖失败：${data['data']['bizMsg']}`);
