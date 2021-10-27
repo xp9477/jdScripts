@@ -62,6 +62,7 @@ cleancartRun = $.isNode() ? (process.env.gua_cleancart_Run ? process.env.gua_cle
 cleancartProducts = $.isNode() ? (process.env.gua_cleancart_products ? process.env.gua_cleancart_products : `${cleancartProducts}`) : ($.getdata('gua_cleancart_products') ? $.getdata('gua_cleancart_products') : `${cleancartProducts}`);
 
 cleancartRun='true'
+gua_cleancart_products='*@&@'
 let productsArr = []
 let cleancartProductsAll = []
 for (let i of cleancartProducts && cleancartProducts.split('|-|')) {
