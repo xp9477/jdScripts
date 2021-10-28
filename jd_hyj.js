@@ -206,7 +206,7 @@ function get_secretp() {
 }
 
 function travel_sign() {
-    let body = { "ss": { "extraData": { "log": "", "sceneid": "HYGJZYh5" }, "secretp": secretp, "random": randomString(8) } };
+    let body = { "ss": { "extraData": { "log": "", "sceneid": "HYJhPageh5" }, "secretp": secretp, "random": randomString(8) } };
     return new Promise((resolve) => {
         $.post(taskPostUrl("travel_sign", body), async(err, resp, data) => {
             try {
@@ -240,7 +240,7 @@ function travel_sign() {
 }
 
 function travel_raise() {
-    let body = { "ss": { "extraData": { "log": "", "sceneid": "HYGJZYh5" }, "secretp": secretp, "random": randomString(8) } };
+    let body = { "ss": { "extraData": { "log": "", "sceneid": "HYJhPageh5" }, "secretp": secretp, "random": randomString(8) } };
     return new Promise((resolve) => {
         $.post(taskPostUrl("travel_raise", body), async(err, resp, data) => {
             try {
@@ -274,7 +274,7 @@ function travel_raise() {
 }
 
 function travel_collectAtuoScore() {
-    let body = { "ss": { "extraData": { "log": "", "sceneid": "HYGJZYh5" }, "secretp": secretp, "random": randomString(8) } };
+    let body = { "ss": { "extraData": { "log": "", "sceneid": "HYJhPageh5" }, "secretp": secretp, "random": randomString(8) } };
     return new Promise((resolve) => {
         $.post(taskPostUrl("travel_collectAtuoScore", body), async(err, resp, data) => {
             try {
@@ -340,7 +340,7 @@ function travel_getTaskDetail() {
 }
 
 function travel_collectScore(taskToken, taskId) {
-    let body = { "taskId": taskId, "taskToken": taskToken, "actionType": 1, "ss": { "extraData": { "log": "", "sceneid": "HYGJZYh5" }, "secretp": secretp, "random": randomString(8) } };
+    let body = { "taskId": taskId, "taskToken": taskToken, "actionType": 1, "ss": { "extraData": { "log": "", "sceneid": "HYJhPageh5" }, "secretp": secretp, "random": randomString(8) } };
 
     return new Promise((resolve) => {
         $.post(taskPostUrl("travel_collectScore", body), async(err, resp, data) => {
@@ -531,7 +531,7 @@ async function toHelp() {
 }
 
 function help(inId) {
-    let body = {"ss": { "extraData": { "log": "", "sceneid": "HYGJZYh5" }, "secretp": secretp, "random": randomString(8) }, "inviteId":inId };
+    let body = {"ss": { "extraData": { "log": "", "sceneid": "HYJhPageh5" }, "secretp": secretp, "random": randomString(8) }, "inviteId":inId };
     return new Promise((resolve) => {
         $.post(taskPostUrl("travel_collectScore", body), async(err, resp, data) => {
           if (err) {
@@ -590,7 +590,7 @@ async function toHelpPk() {
 }
 
 function helpPk(inId) {
-    let body = {"ss": { "extraData": { "log": "", "sceneid": "HYGJZYh5" }, "secretp": secretp, "random": randomString(8) }, "inviteId":inId, "confirmFlag":"1"};
+    let body = {"ss": { "extraData": { "log": "", "sceneid": "HYJhPageh5" }, "secretp": secretp, "random": randomString(8) }, "inviteId":inId, "confirmFlag":"1"};
     return new Promise((resolve) => {
         $.post(taskPostUrl3("travel_pk_joinGroup", body), async(err, resp, data) => {
           if (err) {
