@@ -89,7 +89,7 @@ const JD_API_HOST = 'https://api.m.jd.com/client.action';
                                     }
 
                                 }
-                                await $.wait(8000)
+                                await $.wait(9000)
                                 for (var o = 0; o < tmp.length; o++) {
                                     if (tmp[o].status == 1) {
                                         conti = true
@@ -321,6 +321,7 @@ function travel_getTaskDetail() {
                                     resolve("")
                                 }else {
                                   inviteIds.push(data.data.result.inviteId)
+                                  console.log(data.data.result.inviteId)
                                   resolve(data.data.result)
                                   await submitCode(data.data.result.inviteId, 'hyj');
                                 }  
