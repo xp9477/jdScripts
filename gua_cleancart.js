@@ -66,7 +66,7 @@ cleancartProducts = $.isNode() ? (process.env.gua_cleancart_products ? process.e
 
 jdSignUrl='https://jd.smiek.tk/jdcleancatr_21102717'
 cleancartRun='true'
-cleancartProducts='*@&@'
+cleancartProducts='betterus@&@不清空'
 
 let productsArr = []
 let cleancartProductsAll = []
