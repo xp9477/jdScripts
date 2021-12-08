@@ -65,7 +65,9 @@ $.shareCodes = [];
       await jdSplit()
     }
   }
-  let res = []
+  let res = ['T019-akuFnZjjC6_Y2KUyL0CjRQmoaX5kRrbA',
+  'T0205KkcB0lDkCiQZmiz16xJCjRQmoaX5kRrbA',
+  ]
   let res2 = []
 
   $.newShareCodes = [...new Set([...$.shareCodes, ...(res || []), ...(res2 || [])])]
