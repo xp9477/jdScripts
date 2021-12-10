@@ -52,7 +52,7 @@ async function main() {
   $.max = false;
   $.hotFlag = false;
   // let codeLsit = ['nt5zCm1M','nLhu1LP','ndhM07k']
-  $.code = "vKKuCrf";
+  $.code = "vKMLxIM";
   for (let i = 0; i < 1 && !$.max; i++) {
     $.newCookie = "";
     $.url1 = "";
@@ -102,7 +102,7 @@ function getcouponUrl() {
           console.log(`${$.name} getcouponUrl API请求失败，请检查网路重试`);
         } else {
           if (data) {
-            if ($.code === "vKKuCrf") {
+            if ($.code === "vKMLxIM") {
               $.couponUrl = (data.match(/"value":"(.*)"\}'/) && data.match(/"value":"(.*)"\}'/)[1]) || ''
             } else {
               $.couponUrl = ''
