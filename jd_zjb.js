@@ -7,7 +7,7 @@ export InviterPin="dS%2Bp85VyjydPuAOOnFP%2Faw%3D%3D" ##你的邀请码
 
 [task_local]
 #柠檬赚金币
-15 6 * * * http://nm66.top/jd_zjb.js, tag=柠檬赚金币, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+15 0 * * * http://nm66.top/jd_zjb.js, tag=柠檬赚金币, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
 */
 const $ = new Env('柠檬赚金币');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -115,7 +115,7 @@ function help() {
                 let options = {
     url: `https://api.m.jd.com`,
 
-    body: `functionId=TaskInviteService&body={"method":"participateInviteTask","data":{"channel":"1","encryptionInviterPin":"${InviterPin}","type":1}}&appid=market-task-h5&uuid=7303439343432346-7356431353233311&eu=7303439343432341&fv=7356431353233321&_t=1623475839367`,
+    body: `functionId=TaskInviteService&body={"method":"participateInviteTask","data":{"channel":"1","encryptionInviterPin":"${InviterPin}","type":1}}&appid=market-task-h5&uuid=&_t=1639889125697`,
 headers: {
 "Origin": "https://assignment.jd.com",
 "Host": "api.m.jd.com",
@@ -129,9 +129,9 @@ headers: {
 
                     //data = data.match(/(\{[^()]+\}.+)/)[1]
 
-                    //console.log(data)
+                    // console.log(data)
                     const reust = JSON.parse(data)
-                    //console.log(reust)
+                    console.log(reust)
                     if(reust.code == 0){
                     $.log(`即将开始邀请：${InviterPin}\n邀请获得金币: `+reust.data.coinReward*0.1+"金币")
                 }else  
