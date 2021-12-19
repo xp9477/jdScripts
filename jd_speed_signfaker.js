@@ -110,7 +110,7 @@ async function signInit() {
     $.get(taskUrl('speedSignInit', {
       "activityId": "8a8fabf3cccb417f8e691b6774938bc2",
       "kernelPlatform": "RN",
-      "inviterId":"U44jAghdpW58FKgfqPdotA=="
+      "inviterId":"p6B2W4nq81NUqO14pi15KQ=="
     }), async (err, resp, data) => {
       try {
         if (err) {
@@ -666,7 +666,6 @@ function taskGetUrl(function_id, body) {
 }
 
 function invite2() {
-  let t = +new Date()
   let inviterIdArr = [
   "p6B2W4nq81NUqO14pi15KQ==",
   "SJNiXLP5w+NC3KA4hZjW8g==", 
@@ -677,15 +676,15 @@ function invite2() {
   let inviterId = inviterIdArr[Math.floor((Math.random() * inviterIdArr.length))]
   let options = {
     url: "https://api.m.jd.com/",
-    body: `functionId=TaskInviteService&body=${JSON.stringify({"method":"participateInviteTask","data":{"channel":"1","encryptionInviterPin":encodeURIComponent(inviterId),"type":1}})}&appid=market-task-h5&uuid=&_t=${t}`,
+    body: `functionId=TaskInviteService&body=${JSON.stringify({"method":"participateInviteTask","data":{"channel":"1","encryptionInviterPin":encodeURIComponent(inviterId),"type":1}})}&appid=market-task-h5&uuid=&_t=${Date.now()}`,
     headers: {
       "Host": "api.m.jd.com",
       "Accept": "application/json, text/plain, */*",
       "Content-Type": "application/x-www-form-urlencoded",
-      "Origin": "https://gray.jd.com",
+      "Origin": "https://assignment.jd.com",
       "Accept-Language": "zh-CN,zh-Hans;q=0.9",
       "User-Agent": $.isNode() ? (process.env.JS_USER_AGENT ? process.env.JS_USER_AGENT : (require('./JS_USER_AGENTS').USER_AGENT)) : ($.getdata('JSUA') ? $.getdata('JSUA') : "'jdltapp;iPad;3.1.0;14.4;network/wifi;Mozilla/5.0 (iPad; CPU OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1"),
-      "Referer": "https://gray.jd.com/",
+      "Referer": "https://assignment.jd.com/",
       "Accept-Encoding": "gzip, deflate, br",
       "Cookie": cookie
     }
@@ -698,11 +697,11 @@ function invite2() {
 function invite() {
   let t = +new Date()
   let inviterIdArr = [
-    "p6B2W4nq81NUqO14pi15KQ==",
-    "SJNiXLP5w+NC3KA4hZjW8g==", 
-    "Qo4xAe9R7rAEPlhPS3lCBg==",
-    "RGDp3/NopJk9a8KXFD4NiOlDVda2FG2ePIVW4AdrLxM=",
-    "Jf+ERExkAr6tnyk55QQFZA=="
+  "p6B2W4nq81NUqO14pi15KQ==",
+  "SJNiXLP5w+NC3KA4hZjW8g==", 
+  "Qo4xAe9R7rAEPlhPS3lCBg==",
+  "RGDp3/NopJk9a8KXFD4NiOlDVda2FG2ePIVW4AdrLxM=",
+  "Jf+ERExkAr6tnyk55QQFZA=="
   ]
   let inviterId = inviterIdArr[Math.floor((Math.random() * inviterIdArr.length))]
   let options = {
