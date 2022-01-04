@@ -109,6 +109,7 @@ if ($.isNode()) {
     await $.wait(1000)
     $.res = await getAuthorShareCode('https://cdn.jsdelivr.net/gh/Aaron-lv/updateTeam@master/shareCodes/jxmc.json')
   }
+  $.res = []
   await shareCodesFormat()
   for (let i = 0; i < cookiesArr.length; i++) {
     $.cookie = cookiesArr[i];
