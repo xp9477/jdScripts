@@ -4,7 +4,7 @@ TG https://t.me/duckjobs
 活动入口:京东汽车 - 右下角 - 领京豆
 先跑积分,不要问为什么分开😂
 
-10 8 * * * jd_mpdzcar.js
+10 8 * * * jd_nhjred.js
 */
 const $ = new Env("头文子J");
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
