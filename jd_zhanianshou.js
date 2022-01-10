@@ -59,7 +59,7 @@ $.shareCodesArr = [];
             message = '';
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
             //   await shareCodesFormat()
-            $.newShareCodes = []
+            $.newShareCodes = ['ZXASTT019-akuFnZjjC6_Y2KUyL0FjRWn6W7zB55awQ']
             for (let i = 0; i < $.newShareCodes.length && true; ++i) {
                 console.log(`\n开始助力 【${$.newShareCodes[i]}】`)
                 let res = await getInfo($.newShareCodes[i])
@@ -153,20 +153,17 @@ $.shareCodesArr = [];
                                 }
                                 break
                             case 21:
-                                if (process.env.FS_LEVEL != 'card') {
-                                    console.log('默认不开卡，设置FS_LEVEL为card开卡')
-                                }else{
-                                    for (var o = 0; o < task.brandMemberVos.length; o++) {
-                                        if (task.brandMemberVos[o].status == 1) {
-                                            console.log(`\n\n ${task.brandMemberVos[o].title}`)
-                                            memberUrl = task.brandMemberVos[o].memberUrl
-                                            memberUrl = transform(memberUrl)
-                                            await join(task.brandMemberVos[o].vendorIds, memberUrl.channel, memberUrl.shopId ? memberUrl.shopId : "")
-                                            await tigernian_collectScore(task.brandMemberVos[o].taskToken, task.taskId)
-                                        }
-
+                                for (var o = 0; o < task.brandMemberVos.length; o++) {
+                                    if (task.brandMemberVos[o].status == 1) {
+                                        console.log(`\n\n ${task.brandMemberVos[o].title}`)
+                                        memberUrl = task.brandMemberVos[o].memberUrl
+                                        memberUrl = transform(memberUrl)
+                                        await join(task.brandMemberVos[o].vendorIds, memberUrl.channel, memberUrl.shopId ? memberUrl.shopId : "")
+                                        await tigernian_collectScore(task.brandMemberVos[o].taskToken, task.taskId)
                                     }
+
                                 }
+                                
                         }
 
                     }
