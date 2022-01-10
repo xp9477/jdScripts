@@ -59,7 +59,7 @@ $.shareCodesArr = [];
             message = '';
             console.log(`\n******开始【京东账号${$.index}】${$.nickName || $.UserName}*********\n`);
             //   await shareCodesFormat()
-            $.newShareCodes = ['ZXASTT019-akuFnZjjC6_Y2KUyL0FjRWn6W7zB55awQ']
+            $.newShareCodes = []
             for (let i = 0; i < $.newShareCodes.length && true; ++i) {
                 console.log(`\n开始助力 【${$.newShareCodes[i]}】`)
                 let res = await getInfo($.newShareCodes[i])
