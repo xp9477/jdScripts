@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*
 '''
+15 */4 * * * wskey.py
 new Env('wskey转换');
 '''
 import socket
