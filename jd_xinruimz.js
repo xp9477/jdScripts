@@ -207,7 +207,7 @@ async function fertilizerdotask() {
                 $.log("任务完成")
             }
         }
-        if ($.fertilizertasklist.prodcuts && ["card","car"].includes(process.env.FS_LEVEL)) {
+        if ($.fertilizertasklist.prodcuts) {
             $.log("去完成加购任务..")
             if ($.fertilizertasklist.prodcuts.length != $.fertilizerlist.view_product.length) {
                 for (const vo of $.fertilizertasklist.prodcuts) {
