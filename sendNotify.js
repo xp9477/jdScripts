@@ -14,7 +14,7 @@ const querystring = require('querystring');
 const exec = require('child_process').exec;
 const $ = new Env();
 const timeout = 15000; //超时时间(单位毫秒)
-console.log("加载sendNotify，当前版本: 20220119");
+
 // =======================================go-cqhttp通知设置区域===========================================
 //gobot_url 填写请求地址http://127.0.0.1/send_private_msg
 //gobot_token 填写在go-cqhttp文件设置的访问密钥
@@ -136,18 +136,18 @@ let strCKFile = '/ql/scripts/CKName_cache.json';
 let Fileexists = fs.existsSync(strCKFile);
 let TempCK = [];
 if (Fileexists) {
-    console.log("检测到别名缓存文件CKName_cache.json，载入...");
+    console.log("加载sendNotify,检测到别名缓存文件，载入...");
     TempCK = fs.readFileSync(strCKFile, 'utf-8');
     if (TempCK) {
         TempCK = TempCK.toString();
         TempCK = JSON.parse(TempCK);
     }
 }
-let strUidFile = '/ql/scripts/CK_WxPusherUid.json';
+let strUidFile = './CK_WxPusherUid.json';
 let UidFileexists = fs.existsSync(strUidFile);
 let TempCKUid = [];
 if (UidFileexists) {
-    console.log("检测到一对一Uid文件WxPusherUid.json，载入...");
+    console.log("检测到WxPusherUid文件，载入...");
     TempCKUid = fs.readFileSync(strUidFile, 'utf-8');
     if (TempCKUid) {
         TempCKUid = TempCKUid.toString();
@@ -165,32 +165,9 @@ let Notify_SkipText = [];
 let isLogin = false;
 if (process.env.NOTIFY_SHOWNAMETYPE) {
     ShowRemarkType = process.env.NOTIFY_SHOWNAMETYPE;
-    if (ShowRemarkType == "2")
-        console.log("检测到显示备注名称，格式为: 京东别名(备注)");
-    if (ShowRemarkType == "3")
-        console.log("检测到显示备注名称，格式为: 京东账号(备注)");
-    if (ShowRemarkType == "4")
-        console.log("检测到显示备注名称，格式为: 备注");
 }
-async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By ccwav Mod', strsummary = "") {
-    console.log(`开始发送通知...`); 
-	
-	//NOTIFY_FILTERBYFILE代码来自Ca11back.
-    if (process.env.NOTIFY_FILTERBYFILE) {
-        var no_notify = process.env.NOTIFY_FILTERBYFILE.split('&');
-        if (module.parent.filename) {
-            const script_name = module.parent.filename.split('/').slice(-1)[0];
-            if (no_notify.some(key_word => {
-                const flag = script_name.includes(key_word);
-                if (flag) {
-                    console.log(`${script_name}含有关键字${key_word},不推送`);
-                }
-                return flag;
-            })) {
-                return;
-            }
-        }
-    }
+async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By ccwav Mod',strsummary="") {
+    console.log(`开始发送通知...`);
 	
     try {
         //Reset 变量
@@ -281,14 +258,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                             isLogin = true;
                             await isLoginByX1a0He(temptest.value);
                             if (!isLogin) {
-								var tempid = 0;
-								if (temptest._id) {
-								    tempid = temptest._id;
-								}
-								if (temptest.id) {
-								    tempid =temptest.id;
-								}
-                                const DisableCkBody = await DisableCk(tempid);
+                                const DisableCkBody = await DisableCk(temptest._id);
                                 strPtPin = temptest.value;
                                 strPtPin = (strPtPin.match(/pt_pin=([^; ]+)(?=;?)/) && strPtPin.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
                                 var strAllNotify = "";
@@ -340,12 +310,12 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                                     text = "京东CK检测";
                                 }
                                 if (process.env.CHECKCK_ALLNOTIFY) {
-                                    strAllNotify = process.env.CHECKCK_ALLNOTIFY;
-                                    /* if (strTempNotify.length > 0) {
-                                    for (var TempNotifyl in strTempNotify) {
-                                    strAllNotify += strTempNotify[TempNotifyl] + '\n';
+                                    var strTempNotify = process.env.CHECKCK_ALLNOTIFY ? process.env.CHECKCK_ALLNOTIFY.split('&') : [];
+                                    if (strTempNotify.length > 0) {
+                                        for (var TempNotifyl in strTempNotify) {
+                                            strAllNotify += strTempNotify[TempNotifyl] + '\n';
+                                        }
                                     }
-                                    }*/
                                     console.log(`检测到设定了温馨提示,将在推送信息中置顶显示...`);
                                     strAllNotify = `\n【✨✨✨✨温馨提示✨✨✨✨】\n` + strAllNotify;
                                     console.log(strAllNotify);
@@ -394,7 +364,6 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
         }
         if (strtext.indexOf("cookie已失效") != -1 || strdesp.indexOf("重新登录获取") != -1 || strtext == "Ninja 运行通知") {
             if (Notify_NoCKFalse == "true" && text != "Ninja 运行通知") {
-                console.log(`检测到NOTIFY_NOCKFALSE变量为true,不发送ck失效通知...`);
                 return;
             }
         }
@@ -1261,17 +1230,6 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
             //开始读取青龙变量列表
             const envs = await getEnvs();
             if (envs[0]) {
-                var strTempdesp = [];
-                var strAllNotify = "";
-                if (text == "京东资产变动" || text == "京东资产变动#2" || text == "京东资产变动#3" || text == "京东资产变动#4") {
-                    strTempdesp = desp.split('🎏🎏🎏🎏🎏🎏🎏🎏🎏🎏🎏🎏🎏');
-                    if (strTempdesp.length == 2) {
-                        strAllNotify = strTempdesp[0];
-                        desp = strTempdesp[1];
-                    }
-
-                }
-
                 for (let i = 0; i < envs.length; i++) {
                     cookie = envs[i].value;
                     $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
@@ -1327,16 +1285,17 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                         try {
                             //额外处理1，nickName包含星号
                             $.nickName = $.nickName.replace(new RegExp(`[*]`, 'gm'), "[*]");
+
                             text = text.replace(new RegExp(`${$.UserName}|${$.nickName}`, 'gm'), $.Remark);
+
                             if (text == "京东资产变动" || text == "京东资产变动#2" || text == "京东资产变动#3" || text == "京东资产变动#4") {
                                 var Tempinfo = getQLinfo(cookie, envs[i].created, envs[i].timestamp, envs[i].remarks);
                                 if (Tempinfo) {
                                     $.Remark += Tempinfo;
                                 }
                             }
-
                             desp = desp.replace(new RegExp(`${$.UserName}|${$.nickName}`, 'gm'), $.Remark);
-                            strsummary = strsummary.replace(new RegExp(`${$.UserName}|${$.nickName}`, 'gm'), $.Remark);
+
                             //额外处理2，nickName不包含星号，但是确实是手机号
                             var tempname = $.UserName;
                             if (tempname.length == 13 && tempname.substring(8)) {
@@ -1344,7 +1303,6 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
                                 //console.log("额外处理2:"+tempname);
                                 text = text.replace(new RegExp(tempname, 'gm'), $.Remark);
                                 desp = desp.replace(new RegExp(tempname, 'gm'), $.Remark);
-                                strsummary = strsummary.replace(new RegExp(tempname, 'gm'), $.Remark);
                             }
 
                         } catch (err) {
@@ -1362,9 +1320,6 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
 
             }
             console.log("处理完成，开始发送通知...");
-            if (strAllNotify) {
-                desp = strAllNotify + "\n" + desp;
-            }
         }
     } catch (error) {
         console.error(error);
@@ -1428,7 +1383,7 @@ async function sendNotify(text, desp, params = {}, author = '\n\n本通知 By cc
             tgBotNotify(text, desp), //telegram 机器人
             ddBotNotify(text, desp), //钉钉机器人
             qywxBotNotify(text, desp), //企业微信机器人
-            qywxamNotify(text, desp, strsummary), //企业微信应用消息推送
+            qywxamNotify(text, desp,strsummary), //企业微信应用消息推送
             iGotNotify(text, desp, params), //iGot
             gobotNotify(text, desp), //go-cqhttp
             gotifyNotify(text, desp), //gotify
@@ -1441,7 +1396,7 @@ function getuuid(strRemark, PtPin) {
     if (strRemark) {
         var Tempindex = strRemark.indexOf("@@");
         if (Tempindex != -1) {
-            console.log(PtPin + ": 检测到NVJDC的一对一格式,瑞思拜~!");
+            console.log(PtPin+": 检测到NVJDC的一对一格式,瑞思拜~!");
             var TempRemarkList = strRemark.split("@@");
             for (let j = 1; j < TempRemarkList.length; j++) {
                 if (TempRemarkList[j]) {
@@ -1472,7 +1427,7 @@ function getuuid(strRemark, PtPin) {
 
 function getQLinfo(strCK, intcreated, strTimestamp, strRemark) {
     var strCheckCK = strCK.match(/pt_key=([^; ]+)(?=;?)/) && strCK.match(/pt_key=([^; ]+)(?=;?)/)[1];
-    var strPtPin = decodeURIComponent(strCK.match(/pt_pin=([^; ]+)(?=;?)/) && strCK.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
+	var strPtPin = decodeURIComponent(strCK.match(/pt_pin=([^; ]+)(?=;?)/) && strCK.match(/pt_pin=([^; ]+)(?=;?)/)[1]);
     var strReturn = "";
     if (strCheckCK.substring(0, 4) == "AAJh") {
         var DateCreated = new Date(intcreated);
@@ -1481,29 +1436,30 @@ function getQLinfo(strCK, intcreated, strTimestamp, strRemark) {
         if (strRemark) {
             var Tempindex = strRemark.indexOf("@@");
             if (Tempindex != -1) {
-                //console.log(strPtPin + ": 检测到NVJDC的备注格式,尝试获取登录时间,瑞思拜~!");
+                console.log(strPtPin+": 检测到NVJDC的备注格式,尝试获取登录时间,瑞思拜~!");
                 var TempRemarkList = strRemark.split("@@");
                 for (let j = 1; j < TempRemarkList.length; j++) {
                     if (TempRemarkList[j]) {
                         if (TempRemarkList[j].length == 13) {
                             DateTimestamp = new Date(parseInt(TempRemarkList[j]));
-                            //console.log(strPtPin + ": 获取登录时间成功:" + GetDateTime(DateTimestamp));
-                            //过期时间
-                            var UseDay = Math.ceil((DateToday.getTime() - DateCreated.getTime()) / 86400000);
-                            var LogoutDay = 30 - Math.ceil((DateToday.getTime() - DateTimestamp.getTime()) / 86400000);
-                            if (LogoutDay < 1) {
-                                strReturn = "\n【登录信息】总挂机" + UseDay + "天(账号即将到期，请重登续期)"
-                            } else {
-                                strReturn = "\n【登录信息】总挂机" + UseDay + "天(有效期约剩" + LogoutDay + "天)"
-                            }
+                            console.log(strPtPin+": 获取登录时间成功:" + GetDateTime(DateTimestamp));
                             break;
                         }
                     }
                 }
             }
         }
+        //过期时间
+        var UseDay = Math.ceil((DateToday.getTime() - DateCreated.getTime()) / 86400000);
+        var LogoutDay = 30 - Math.ceil((DateToday.getTime() - DateTimestamp.getTime()) / 86400000);
+        if (LogoutDay < 1) {
+            strReturn = "\n【登录信息】已服务" + UseDay + "天(登录状态即将到期，请重新登录)"
+        } else {
+            strReturn = "\n【登录信息】已服务" + UseDay + "天(有效期约剩" + LogoutDay + "天)"
+        }
 
     }
+
     return strReturn
 }
 
@@ -1529,17 +1485,6 @@ async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n\n本通知 B
     try {
         var Uid = "";
         var UserRemark = "";
-        var strTempdesp = [];
-        var strAllNotify = "";
-        if (text == "京东资产变动") {
-            strTempdesp = desp.split('🎏🎏🎏🎏🎏🎏🎏🎏🎏🎏🎏🎏🎏');
-            if (strTempdesp.length == 2) {
-                strAllNotify = strTempdesp[0];
-                desp = strTempdesp[1];
-            }
-
-        }
-
         if (WP_APP_TOKEN_ONE) {
             var tempEnv = await getEnvByPtPin(PtPin);
             if (tempEnv) {
@@ -1607,9 +1552,6 @@ async function sendNotifybyWxPucher(text, desp, PtPin, author = '\n\n本通知 B
                     }
                     console.log("处理完成，开始发送通知...");
                     desp = buildLastDesp(desp, author);
-                    if (strAllNotify) {
-                        desp = strAllNotify + "\n" + desp;
-                    }
                     await wxpusherNotifyByOne(text, desp, strsummary);
                 } else {
                     console.log("未查询到用户的Uid,取消一对一通知发送...");
@@ -1734,18 +1676,15 @@ function gotifyNotify(text, desp) {
 function gobotNotify(text, desp, time = 2100) {
     return new Promise((resolve) => {
         if (GOBOT_URL) {
-            const options = {
-                url: `${GOBOT_URL}?access_token=${GOBOT_TOKEN}&${GOBOT_QQ}`,
-                json: {
-                    message: `${text}\n${desp}`
-                },
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                timeout,
-            };
+	      const options = {
+		url: `${GOBOT_URL}?access_token=${GOBOT_TOKEN}&${GOBOT_QQ}&message=标题:${encodeURIComponent(text+"\n")}内容:${encodeURIComponent(desp)}`,
+		 headers: {
+		  'Content-Type': 'application/x-www-form-urlencoded',
+		},
+		timeout,
+	      };
             setTimeout(() => {
-                $.post(options, (err, resp, data) => {
+                $.get(options, (err, resp, data) => {
                     try {
                         if (err) {
                             console.log('发送go-cqhttp通知调用API失败！！\n');
@@ -2054,7 +1993,7 @@ function ChangeUserId(desp) {
     }
 }
 
-function qywxamNotify(text, desp, strsummary = "") {
+function qywxamNotify(text, desp, strsummary="") {
     return new Promise((resolve) => {
         if (QYWX_AM) {
             const QYWX_AM_AY = QYWX_AM.split(',');
@@ -2072,7 +2011,7 @@ function qywxamNotify(text, desp, strsummary = "") {
             $.post(options_accesstoken, (err, resp, data) => {
                 html = desp.replace(/\n/g, '<br/>');
                 html = `<font size="3">${html}</font>`;
-                if (strsummary == "") {
+                if (strsummary=="") {
                     strsummary = desp;
                 }
                 var json = JSON.parse(data);
@@ -2317,7 +2256,7 @@ function wxpusherNotifyByOne(text, desp, strsummary = "") {
             }
 
             if (strsummary.length > 96) {
-                strsummary = strsummary.substring(0, 95) + "...";
+                strsummary = strsummary.substring(0, 95)+"...";
             }
             let uids = [];
             for (let i of WP_UIDS_ONE.split(";")) {

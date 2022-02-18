@@ -27,7 +27,7 @@ const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
 const jdCookieNode = $.isNode() ? require('./jdCookie.js') : '';
 let cookiesArr = [], cookie = '', message;
-const linkIdArr = ["7ya6o83WSbNhrbYJqsMfFA"];
+const linkIdArr = ["Eu7-E0CUzqYyhZJo9d3YkQ"];
 const signLinkId = '9WA12jYGulArzWS7vcrwhw';
 let linkId;
 if ($.isNode()) {
@@ -40,13 +40,13 @@ if ($.isNode()) {
   cookiesArr = [$.getdata('CookieJD'), $.getdata('CookieJD2'), ...jsonParse($.getdata('CookiesJD') || "[]").map(item => item.cookie)].filter(item => !!item);
 }
 !(async () => {
+  console.log(`\n【如提示活动火爆,可再执行一次尝试】\n`);
   if (!cookiesArr[0]) {
     $.msg($.name, '【提示】请先获取京东账号一cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
-      console.log(`\n如提示活动火爆,可再执行一次尝试\n`);
       cookie = cookiesArr[i];
       $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
       $.index = i + 1;
@@ -79,12 +79,15 @@ if ($.isNode()) {
 
 async function jsRedPacket() {
   try {
+	$.openfan = true;
     await invite2();
-    await sign();//极速版签到提现
+    //await sign();//极速版签到提现
     await reward_query();
     for (let i = 0; i < 3; ++i) {
+	if ($.openfan) {
       await redPacket();//开红包
-      await $.wait(2000)
+      await $.wait(5000)
+	  }
     }
     await getPacketList();//领红包提现
     await signPrizeDetailList();
@@ -150,7 +153,7 @@ async function sign() {
 function reward_query() {
   return new Promise(resolve => {
     $.get(taskGetUrl("spring_reward_query", {
-      "inviter": ["HXZ60he5XxG8XNUF2LSrZg"][Math.floor((Math.random() * 1))],
+      "inviter": ["aN8mFXv3ct4DsDWk6uKZew"][Math.floor((Math.random() * 1))],
       linkId
     }), async (err, resp, data) => {
       try {
@@ -177,7 +180,7 @@ function reward_query() {
 }
 async function redPacket() {
   return new Promise(resolve => {
-    $.get(taskGetUrl("spring_reward_receive",{"inviter":["HXZ60he5XxG8XNUF2LSrZg"][Math.floor((Math.random() * 1))], linkId}),
+    $.get(taskGetUrl("spring_reward_receive",{"inviter":["aN8mFXv3ct4DsDWk6uKZew"][Math.floor((Math.random() * 1))], linkId}),
         async (err, resp, data) => {
           try {
             if (err) {
@@ -194,6 +197,7 @@ async function redPacket() {
                     console.log("获得优惠券")
                   }
                 } else {
+				  $.openfan = false;
                   console.log(data.errMsg)
                 }
               }
@@ -415,7 +419,7 @@ function invite2() {
     }
   }
   $.post(options, (err, resp, data) => {
-    console.log(data)
+    // console.log(data)
   })
 }
 
