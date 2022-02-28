@@ -1,10 +1,24 @@
 /*
-店铺签到，各类店铺签到，有新的店铺直接添加token即可
-============Quantumultx===============
+店铺签到
+活动时间：长期
+更新时间：2022-02-23
+活动地址：https://h5.m.jd.com/babelDiy/Zeus/2PAAf74aG3D61qvfKUM5dxUssJQ9/index.html?token=<TOKEN>
+脚本兼容: QuantumultX, Surge,Loon, JSBox, Node.js
+脚本容易黑IP，建议多台环境轮流错开跑定时任务
+
+=================================Quantumultx=========================
 [task_local]
 #店铺签到
-0 0 * * * jd_shop_sign.js
+1 0,9 * * * https://gitee.com/SuperManito/scripts/raw/master/jd_shop_sign.js, tag=店铺签到, img-url=https://raw.githubusercontent.com/Orz-3/mini/master/Color/jd.png, enabled=true
+=================================Loon===================================
+[Script]
+cron "5 1,9 * * *" script-path=https://gitee.com/SuperManito/scripts/raw/master/jd_shop_sign.js,tag=店铺签到
+===================================Surge================================
+店铺签到 = type=cron,cronexp="5 1,9 * * *",wake-system=1,timeout=3600,script-path=https://gitee.com/SuperManito/scripts/raw/master/jd_shop_sign.js
+====================================小火箭=============================
+店铺签到 = type=cron,script-path=https://gitee.com/SuperManito/scripts/raw/master/jd_shop_sign.js, cronexpr="5 1,9 * * *", timeout=3600, enable=true
 */
+
 const $ = new Env('店铺签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
 //Node.js用户请在jdCookie.js处填写京东ck;
@@ -18,27 +32,17 @@ let vender=''
 let num=0
 let shopname=''
 const token = [
-  "2A8794EC8DA4659DDDA0DF0E1A2AF4AF",
-  "A1E0F96C1D9DB38AE87202E13CE1FD1F",
-  "6D180D5A0B6F4A210684757B0DAC6A38",
-  "6FF6A61279897029F4DE69C341551CFC",
-  "0FCE1975D7A168F5BE2DE89BF2AA784D",
-  "9E2F2B62044E1AC059180A38BE06507D",
-  "C96A69334CA12BCA81DE74335AC1B35E",
-  "A406C4990D5C50702D8C425A03F8076E",
-  "E0AB41AAE21BD9CA8E35CC0B9AA92FA7",
-  "A20223553DF12E06C7644A1BD67314B6",
-  "9621D787095D0030BE681B535F8499BE",
-  "C718DA981DBB8CF73FAC7D5480733B43",
-  "77A6C7B5C2BC9175521931ADE8E3B2E0",
-  "5BEFC891C256D515C4F0F94F15989055",
-  "B1482DB6CB72FBF33FFC90B2AB53D32C",
-  "225A5186B854F5D0A36B5257BAA98739",
-  "9115177F9D949CFB76D0DE6B8FC9D621",
-  "AD73E1D98C83593E22802600D5F72B9B",
-  "447EA174AB8181DD52EFDECEB4E59F16",
-  "32204A01054F3D8F9A1DF5E5CFB4E7F4",
-  "6B52B6FDF119B68A42349EEF6CEEC4FF"
+  'A6F132D8B6DFC25ED209F33B76F64B25',//每天10，3天40，8天88
+  '12E9371B8476ED6394D15593BBE883DF',//每天1，3天10，5天20，7天30
+  '838CAE19025760726BCA46A4B0EDD74A',//每天2，7天20
+  '98E3218582D0CDEA2B684A3BADBE5ED4',//1天1，2天1，3天1
+  '9499A64CCEA392E74429F0D88A95CC40',//2天6，3天7，5天10
+  'B3139FD14B3C75C8BC2A4D5271CABC2B',//3天10
+  '15C455A35A9A870902DBD6CEB524FCFA',//3天10
+  'DA287B11330B27857C784C217F87D976',//5天12
+  'E52225DCAA8AB8F3FCC470C9C8E56CBB',//7天20
+  '5A9AC468F19C70AF7EEDCBA81A36B555',//7天3
+  'B3855AA4C203EB79F222EFAFE68535FC',//15天50，30天100
 ]
 
 if ($.isNode()) {
@@ -83,7 +87,7 @@ if ($.isNode()) {
     }
   }
   if ($.isNode() && allMessage) {
-    await notify.sendNotify(`${$.name}`, `${allMessage}`)
+    //await notify.sendNotify(`${$.name}`, `${allMessage}`)
   }
 })()
     .catch((e) => {
